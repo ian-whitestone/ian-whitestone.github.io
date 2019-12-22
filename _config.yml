@@ -6,8 +6,7 @@
 name: Ian Whitestone
 
 # Short bio or description (displayed in the header)
-description: 🏔️ 🇨🇦 | 🔎 📈 🤖
-
+description: 🔎 📈 🤖
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: https://avatars0.githubusercontent.com/u/11096727?s=400&u=90637cf356648f7adc267e53acf53365dd7064ae&v=4
 
@@ -24,8 +23,8 @@ footer-links:
   github: ian-whitestone
   linkedin: ian-whitestone-a20a2249
   pinterest:
-  rss: x # just type anything here for a working RSS icon
-  twitter: # jekyllrb
+  rss: # just type anything here for a working RSS icon
+  twitter: IanWhitestone
   stackoverflow: # your stackoverflow profile, e.g. "users/50476/bart-kiers"
   youtube: # channel/<your_long_string> or user/<user-name>
   googleplus: # anything in your profile username that comes after plus.google.com/

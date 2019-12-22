@@ -10,7 +10,7 @@ permalink: /talks/
     *   Toronto Python Meetup - September 24, 2019
 *   [Who's There? Building a home security system with Pi & Slack!](https://ianwhitestone.work/slides/pycon-canada-2018.html)
     *   [PyCon Canada](https://2018.pycon.ca/) - November 10, 2018
-    *   [Watch the presentation](https://www.youtube.com/watch?v=hvV6EKfThL8&t=4s)
+    *   [Presentation recording](https://www.youtube.com/watch?v=hvV6EKfThL8&t=4s)
 *   [The Good and the Bad of Moving an Enterprise Data Ecosystem to the Cloud](https://ianwhitestone.work/slides/data-finance-toronto-2018.html)
     *   Data + Finance Panel - Toronto - September 20, 2018
 
