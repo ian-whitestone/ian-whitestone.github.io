@@ -53,7 +53,7 @@ This entire project was motivated by the work of Ben Wellington, who runs a blog
 
 What intrigued me most was that he found a fire hydrant that was wreaking havoc with parking tickets, due to it's hidden nature. As a result, I decided to try and find Toronto's top grossing fire hydrants.
 
-For each spot, the total fines accumulated between 2008 and 2016 are shown. Take a look at the Google streetview shots and see what you think. Some of the fire hydrants are quite far away from the curve, which seemed somewhat controversial to me at first since they would be hard to spot on a busy day. It looks like the City of Toronto has since made efforts to make the hydrants more visible.
+For each spot, the total fines accumulated between 2008 and 2016 are shown. Take a look at the Google streetview shots and see what you think. Some of the fire hydrants are quite far away from the curb, which seemed somewhat controversial to me at first since they would be hard to spot on a busy day. It looks like the City of Toronto has since made efforts to make the hydrants more visible.
 
 1) 393 UNIVERSITY AVE   - $358,620
 <p align="center">
