@@ -19,22 +19,21 @@ html {
 
 body {
 	background: $white;
-  font: 18px/1.4 $courier;
+  font: 18px/1.4 $helvetica;
   color: $darkGray;
-  letter-spacing: -1.5px;
 }
 
 .container {
   margin: 0 auto;
-  max-width: 740px;
+  max-width: 940px;
   padding: 0 10px;
   width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: $courier;
+  font-family: $helvetica;
   color: $darkerGray;
-  font-weight: bold;
+  font-weight: medium;
 
   line-height: 1.7;
   margin: 1em 0 15px;
@@ -49,7 +48,6 @@ h1 {
   font-size: 30px;
   a {
     color: inherit;
-    letter-spacing: 0px;
   }
 }
 
@@ -199,7 +197,7 @@ img {
   font-family: $courier;
   font-weight: 300;
   font-size: 28px;
-  letter-spacing: 1px;
+  letter-spacing: 0px;
 }
 
 .site-description {

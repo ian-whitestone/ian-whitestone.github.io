@@ -2,21 +2,8 @@
 layout: default
 ---
 
-<h2> Under construction.. </h2>
-<img src="{{ site.baseurl }}/images/under_construction.gif">
-
 <div class="posts">
   {% for post in site.posts %}
   <h3><a href="{{ site.baseurl }}{{ post.url }}">{{ post.date | date: "%Y-%m-%d" }}: {{ post.title }}</a></h3>
-<!--     <article class="post">
-
-      <h3><a href="{{ site.baseurl }}{{ post.url }}">{{ post.date | date: "%Y-%m-%d" }}: {{ post.title }}</a></h3>
-
-      <div class="entry">
-        {{ post.excerpt }}
-      </div>
-
-      <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">...</a>
-    </article> -->
   {% endfor %}
 </div>
