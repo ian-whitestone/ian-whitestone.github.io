@@ -6,7 +6,7 @@ comments: true
 
 ## Background
 
-I am currently using [Zappa](https://github.com/Miserlou/Zappa) to manage a suite of lambda functions I have running on Amazon Web Services (AWS) to support a slack application I built; [domi](https://domi.cloud/). If you aren't familiar with Zappa, it vastly simplifies the process of creating, deploying and updating lambda functions using a Python runtime. You can learn more from the [zappa blog](https://github.com/Miserlou/zappa-blog) or [this talk](https://ianwhitestone.work/slides/python-meetup-sept-2019.html) I gave at a Toronto Python meetup. 
+I am currently using [Zappa](https://github.com/Miserlou/Zappa) to manage a suite of lambda functions I have running on Amazon Web Services (AWS) to support a slack application I built; [domi](https://domi.cloud/). If you aren't familiar with Zappa, it vastly simplifies the process of creating, deploying and updating lambda functions using a Python runtime. You can learn more from the [zappa blog](https://github.com/Miserlou/zappa-blog) or [the slides](https://ianwhitestone.work/slides/python-meetup-sept-2019.html) from a talk I gave at a Toronto Python meetup.
 
 The configuration for each function is stored in the project's `zappa_settings.json` config file. I currently have 3 different lambda functions running to support my project. As a result, my `zappa_settings.json` looks something like this:
 
