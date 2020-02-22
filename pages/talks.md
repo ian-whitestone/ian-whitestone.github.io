@@ -4,6 +4,8 @@ title: Talks
 permalink: /talks/
 ---
 
+*   [Bootstrapping a data-driven application with Zappa](https://ianwhitestone.work/slides/serverless-meetup-feb-2020.html)
+    *   [Serverless Toronto](https://www.meetup.com/Serverless-Toronto/events/267827023/) - February 27, 2020
 *   [Gimme Shelter: Using Python to Find an Apartment in Toronto](https://ianwhitestone.work/slides/pycon-canada-2019.html)
     *   [PyCon Canada](https://2019.pycon.ca/) - November 17, 2019
 *   [Serverless Python with Zappa](https://ianwhitestone.work/slides/python-meetup-sept-2019.html)
