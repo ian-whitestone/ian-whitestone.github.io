@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Custom exclusions for zappa deployment packages via zip callbacks
+title: Custom exclusions for Zappa deployment packages via zip callbacks
 comments: true
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Serverless python deployments with Github Actions
+title: Serverless Python deployments with Github Actions
 comments: true
 ---
 

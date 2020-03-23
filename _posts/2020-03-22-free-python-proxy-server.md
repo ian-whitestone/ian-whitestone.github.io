@@ -1,12 +1,12 @@
 ---
 layout: post
-title: A free, Python proxy server on AWS lambda
+title: A free, Python proxy server on AWS Lambda
 comments: true
 ---
 
 Amazon Web Services' (AWS) serverless offering, [AWS Lambda](https://aws.amazon.com/lambda/), is part of their "always free tier". What that means is you get 1 million requests per month, or 3.2 million seconds of compute time per month, for free. Forever. 
 
-You can deploy a simple flask app on lambda, which will make your web requests for you from within AWS. The deployment is seamlessly handled by [Zappa](https://github.com/Miserlou/Zappa), a framework for managing serverless Python applications.
+You can deploy a simple Flask app on Lambda, which will make your web requests for you from within AWS. The deployment is seamlessly handled by [Zappa](https://github.com/Miserlou/Zappa), a framework for managing serverless Python applications.
 
 <p align="center">
     <img src="{{ site.baseurl }}{% link images/free-proxy-server/architecture.png %}" height="400px">
@@ -65,9 +65,9 @@ Here's a demo of running the proxy server locally, with `python proxy.py`:
 
 <img src="{{ site.baseurl }}{% link images/free-proxy-server/local_demo.gif %}">
 
-Now of course, we don't want to run this thing locally. That defeats the whole purpose of a proxy. To get this app running on the cloud, we leverage the Python serverless framework, [Zappa](https://github.com/Miserlou/Zappa). Zappa takes a config file, `zappa_settings.json`, and automatically creates lambda functions which serve your Flask application.
+Now of course, we don't want to run this thing locally. That defeats the whole purpose of a proxy. To get this app running on the cloud, we leverage the Python serverless framework, [Zappa](https://github.com/Miserlou/Zappa). Zappa takes a config file, `zappa_settings.json`, and automatically creates Lambda functions which serve your Flask application.
 
-Here, I tell Zappa to create two lambda functions, one in the `us-east-1` region and another in the `us-west-1` region.
+Here, I tell Zappa to create two Lambda functions, one in the `us-east-1` region and another in the `us-west-1` region.
 
 ```json
 {
@@ -86,7 +86,7 @@ Here, I tell Zappa to create two lambda functions, one in the `us-east-1` region
 }
 ```
 
-The deployment is a simple Zappa cli call, `zappa deploy --all`. As you can see, it takes just over a minute to deploy two lambda functions and all the associated AWS configurations (API gateway, IAM roles, etc..)
+The deployment is a simple Zappa cli call, `zappa deploy --all`. As you can see, it takes just over a minute to deploy two Lambda functions and all the associated AWS configurations (API gateway, IAM roles, etc..)
 
 <img src="{{ site.baseurl }}{% link images/free-proxy-server/zappa_deploy_all.png %}">
 

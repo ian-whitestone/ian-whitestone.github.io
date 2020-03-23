@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Building a home security system with a raspberry pi, python and slack
+title: Building a home security system with a Raspberry Pi, Python and Slack
 comments: true
 ---
 
