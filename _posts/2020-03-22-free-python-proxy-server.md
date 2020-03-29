@@ -48,6 +48,11 @@ proxy_response = requests.post(
     '<proxy_server_url', # Your proxy server URL
     data={'url': 'https://ianwhitestone.work'} # URL you want to request
 )
+if not proxy_response.ok:
+    raise Exception(
+        "Proxy request not successful. Status code: "
+        f"{proxy_response.status_code}\n{proxy_response.text}"
+    )
 response = pickle.loads(proxy_response.content)
 ```
 
