@@ -289,3 +289,30 @@ footer {
 @import "svg-icons";
 
 
+/*******************/
+/* CUSTOM ADDITONS */
+/*******************/
+
+.notice {
+  margin: 2em 0 !important;
+  padding: 1em;
+  color: #494e52;
+  font-size: .8em !important;
+  border-radius: 4px;
+  text-indent: initial;
+}
+
+.notice-info {
+  background-color: #eef7fa;
+  box-shadow: 0 1px 1px rgba(82,173,200,0.25);
+}
+
+.notice-warning {
+  background-color: #fef4e6;
+  box-shadow: 0 1px 1px rgba(248,148,6,0.25);
+}
+
+.notice-danger {
+  background-color: #fdefef;
+  box-shadow: 0 1px 1px rgba(238,95,91,0.25);
+}
