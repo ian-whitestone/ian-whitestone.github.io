@@ -40,9 +40,9 @@ else:
 
 1) We load in an existing batch of data and log our expectations for how the data should behave
 
-* This process is usually only done once, and in an interactive environment, like jupyter. It requires lots of trial and error as you learn new things about your data and encode all your beliefs for how future data should behave.
+* This process is usually done once, and in an interactive environment, like jupyter. It requires lots of trial and error as you learn new things about your data and encode all your beliefs for how future data should behave.
 * Under the hood, the `ge.read_csv()` method is using [`pandas`](https://pandas.pydata.org/) to load a dataset from disk. Alternatively, a ge dataset can be initialized directly from an existing pandas dataset with `ge.from_pandas(my_pandas_df)`. Any subsequent expectations we create and run will be executed as operations against this underlying pandas dataframe. 
-* We explicitly state that we expect all values in the `id` column to be non-null. This is a very straightforward example, and something that can usually be handled by database schema constraints. Nonetheless, it illustrates the simple and declarative nature of great-expectations. There are a whole host of other, more powerful expectations listed [here](https://great-expectations.readthedocs.io/en/latest/expectation_glossary.html).
+* We explicitly state that we expect all values in the `id` column to be non-null. This is a very straightforward example, and something that can usually be handled by database schema constraints. Nonetheless, it illustrates the simple and declarative nature of ge. There are a whole host of other, more powerful expectations listed [here](https://great-expectations.readthedocs.io/en/latest/expectation_glossary.html).
 * We save our suite of expectations to disk. Here's what `my_expectations.json` looks like:
 
 ```json
@@ -195,7 +195,7 @@ listings = SqlAlchemyDataset(table_name='listings', engine=db_engine)
 listings.expect_table_row_count_to_be_between(min_value=250)
 ```
 
-On common apartment sites like Craigslist and Kijiji, listings will have varying metadata as the sites give users flexibility over what information they provide. Below are the daily null rates for two metadata fields; laundry & parking. In this case, a null rate is defined as the % of listings that did not contain the given field.
+On common apartment sites, listings will have varying metadata as the sites give users flexibility over what information they provide. Below are the daily null rates for two metadata fields; laundry & parking. In this case, a null rate is defined as the % of listings that did not contain the given field.
 
 <p align="center">
     <img src="{{ site.baseurl }}{% link images/hello-great-expectations/null_rates.png %}">
@@ -252,7 +252,7 @@ In the apartment hunting world, a common way to categorize listings is by the nu
     <img src="{{ site.baseurl }}{% link images/hello-great-expectations/bedrooms_distribution.png %}">
 </p>
 
-Let's say we want to detect changes in the distribution of bedroom counts. We could be interested in doing this to understand shifts in the market, or potential data issues where users posting the listings are omitting the field. In my case, the field is also used as an input to domi's [price rank model](https://domi.cloud/instructions#price_rank), so it's important for me to be aware of any distribution shifts.
+Let's say we want to detect changes in the distribution of bedroom counts. We could be interested in doing this to understand shifts in the market, or potential data issues where users posting the listings are omitting the field. In my case, the field is used as an input to domi's [price rank model](https://domi.cloud/instructions#price_rank), so it's important for me to be aware of any distribution shifts.
 
 
 ge comes with an implementation of the [Chi-squared test](https://en.wikipedia.org/wiki/Chi-squared_test), which is a common test used to compare two categorial variable distributions. Implementing this test is fairly simple. You calculate your expected weights of each category (fractions - see values in graph above) and specify them when creating the expectation.
@@ -280,13 +280,13 @@ Another input to the [price rank model](https://domi.cloud/instructions#price_ra
 
 Since the apartment size is a continuous variable, we cannot use the Chi-square test (unless we did some custom, manual binning). Instead, ge comes with an implementation of the [Kolmogorov–Smirnov (K-S) test](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test), which can be used to compare two arbitrary, continuous distributions.
 
-The [ge implementation of the K-S test](https://docs.greatexpectations.io/en/latest/module_docs/dataset_module.html?highlight=expect_column_parameterized_distribution_ks_test_p_value_to_be_greater_than#great_expectations.dataset.dataset.Dataset.expect_column_parameterized_distribution_ks_test_p_value_to_be_greater_than) requires us to specify the parameters of the distribution we would like to compare are new data to. In order to do this, we need to produce our expected distribution. By visually inspecting the plot above, you can observe that the distribution appears to be [log-normal](https://en.wikipedia.org/wiki/Log-normal_distribution). This can be validated by plotting the `log(size)`, and observing an distribution that looks normal.
+The [ge implementation of the K-S test](https://docs.greatexpectations.io/en/latest/module_docs/dataset_module.html?highlight=expect_column_parameterized_distribution_ks_test_p_value_to_be_greater_than#great_expectations.dataset.dataset.Dataset.expect_column_parameterized_distribution_ks_test_p_value_to_be_greater_than) requires us to specify the parameters of the distribution we would like to compare our new data to. In order to do this, we need to provide the parameters of our expected distribution. By visually inspecting the plot above, you can observe that the distribution appears to be [log-normal](https://en.wikipedia.org/wiki/Log-normal_distribution). This can be validated by plotting the `log(size)`, and observing a distribution that looks approximately normal.
 
 <p align="center">
     <img src="{{ site.baseurl }}{% link images/hello-great-expectations/lognormal_size_distribution.png %}">
 </p>
 
-I recently finished Cam Davidson-Pilon's fantastic introductory book to [bayesian methods](https://github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers), so I chose to fit a distribution using [PyMC3](https://docs.pymc.io/) to test out what I learned. Alternatively, you can use [scipy's built in fit methods](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.lognorm.html).
+I recently finished Cam Davidson-Pilon's fantastic introductory book to [bayesian methods](https://github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers), so I chose to fit a distribution using [PyMC3](https://docs.pymc.io/) to test out what I learned. Alternatively, you can use [scipy's built-in fit methods](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.lognorm.html).
 
 ```python
 import numpy as np
@@ -299,6 +299,7 @@ with pm.Model() as model:
     sigma_ = pm.Uniform('sigma', 0, 5)
     price = pm.Lognormal('size', mu=mu_, sigma=sigma_, observed=df.sqft)
 
+    # Crazy MCMC shit
     step = pm.Metropolis()
     trace = pm.sample(15000, step=step)
 
@@ -325,7 +326,7 @@ listings.expect_column_parameterized_distribution_ks_test_p_value_to_be_greater_
 )
 ```
 
-Unfortunately, this will raise a `NotImplementedError` since the expectation has only been implemented for the `PandasDataset` (as of 2020-04-22). But, lucky for us, ge comes with built in flexibility that allows us to implement our own custom expectations. Using this, I re-created the K-S test for a `SqlAlchemyDataset` by porting over the original code.
+Unfortunately, this will raise a `NotImplementedError` since the expectation has only been implemented for the `PandasDataset` (as of 2020-04-22). But, lucky for us, ge comes with built-in flexibility that allows us to implement our own custom expectations. Using this, I re-created the K-S test for a `SqlAlchemyDataset` by porting over the original code.
 
 
 ```python
@@ -378,7 +379,7 @@ class CustomSqlAlchemyDataset(SqlAlchemyDataset):
         }
 ```
 
-Now instead of creating our dataset with the built in `SqlAlchemyDataset`, we do so with the custom one I just created:
+Now instead of creating our dataset with the built-in `SqlAlchemyDataset`, we do so with the custom one I just created:
 
 ```python
 from my_file.custom_sqa_dataset import CustomSqlAlchemyDataset
@@ -386,7 +387,7 @@ from my_file.custom_sqa_dataset import CustomSqlAlchemyDataset
 listings = CustomSqlAlchemyDataset(table_name='listings', engine=db_engine)
 
 # Add now we can successfully create our K-S expectation
-expect_column_parameterized_distribution_ks_test_p_value_to_be_greater_than(
+listings.expect_column_parameterized_distribution_ks_test_p_value_to_be_greater_than(
     column='sqft',
     distribution='lognorm',
     params={
@@ -408,18 +409,14 @@ At the end of the day, a ge deployment is as simple as executing a script on a s
 2. Validates it against the desired expectations suite
 3. Takes action based on the validation results
 
-Leveraging the work from above, with some added code for slack alerting will give you everything you need to execute data quality checks on a daily basis:
+I have been running my ge deployment in parallel to my application. For more complex deployments, you could have ge checks running at different steps of your data pipeline. Leveraging the work from above, with some added code for slack alerting, will give you everything you need to execute data quality checks on a daily basis:
 
 ```python
-"""
-Run `python main.py` to execute script.
-"""
 import json
 import os
 
-import requests
-
 from great_expectations.dataset import SqlAlchemyDataset
+import requests
 from sqlalchemy import create_engine
 
 # 1) Load in a new batch of data
@@ -472,7 +469,7 @@ if not validation_results["success"]:
 When expectations are violated, you'll get an alert like this:
 
 <p align="center">
-    <img src="{{ site.baseurl }}{% link images/hello-great-expectations/ge_slack_message.png %}">
+    <img src="{{ site.baseurl }}{% link images/hello-great-expectations/ge_slack_message.png %}" height="600px">
 </p>
 
 
@@ -480,6 +477,6 @@ You can easily accomplish a ge deployment with a small server and a cron job. Fo
 
 # Closing Thoughts
 
-There is a lot of value in having data quality checks consistently running on your datasets. Even having a simple check on row counts can go a long way. Applications can appear to be performing fine, as your logs or existing error monitoring solutions aren't flagging anything. Only by inspecting the underlying data can the true issues be uncovered. With a small amount of upfront investment, ge gives you a powerful framework for executing continuous data quality checks.
+There is a lot of value in having data quality checks consistently running on your datasets. Even having a simple check on row counts can go a long way. Applications can appear to be performing fine, as your logs or existing error monitoring solutions aren't flagging anything. Only by inspecting the underlying data can the true issues be uncovered. With a small amount of upfront investment, ge gives you a powerful framework for executing continuous data quality checks to help you reveal such issues.
 
 The code I outlined above is enough to get you started with a simple ge deployment. In a future post I will dive into using the other functionality provided by ge to support more advanced deployments, involving scaling up to support execution of multiple sets of expectations along with custom alerting and reporting.
