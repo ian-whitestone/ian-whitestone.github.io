@@ -67,7 +67,7 @@ You can see how all this is layered together in the demo below.
 <img src="{{ site.baseurl }}{% link images/rpi-security-system/background_subtraction/background_subtraction_demo.gif %}">
 
 
-**Note:** This method of background subtraction was entirely based off of a blog post by Adrian Rosebrock over at pyimagesearch.com. There are other background subtraction models built directly into OpenCV ([see here](https://docs.opencv.org/3.4/db/d5c/tutorial_py_bg_subtraction.html)), but they are more computationally expensive. Check out the references section at the bottom for a link to his post. 
+**Note:** This method of background subtraction was entirely based off of a blog post by Adrian Rosebrock over at [PyImageSearch](https://www.pyimagesearch.com/). There are [other background subtraction models](https://docs.opencv.org/3.4/db/d5c/tutorial_py_bg_subtraction.html) built directly into OpenCV, but they are more computationally expensive. Check out the references section at the bottom for a link to his post. 
 
 ### Slack Interface
 Slack was used as an interface to the security system since it has a fantastic API, works excellently on mobile and desktop, and removed the need for me to make a GUI.
