@@ -80,7 +80,7 @@ I am currently using [Zappa](https://github.com/Miserlou/Zappa) to manage a suit
 In terms of a CI/CD pipeline, I have two simple requirements:
 
 * Run a suite of tests with pytest
-* Re-deploy my code to all lambda functions I have running for the project (see [previous post]({% post_url 2020-01-03-Zappa-Zip-Callbacks %}) for details on these different functions)
+* Re-deploy my code to all lambda functions I have running for the project (see [previous post]({% post_url 2020-01-03-zappa-zip-callbacks %}) for details on these different functions)
 
 I want the test suite (CI portion) to run on every pull request into master, and the deploy workflow (CD portion) to run after a commit is pushed to master.
 
