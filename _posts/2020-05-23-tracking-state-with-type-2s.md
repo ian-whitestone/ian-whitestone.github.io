@@ -75,6 +75,8 @@ At most technology companies, snapshots of application database tables are extra
 
 Using these snapshots, one could leverage them as an input source for building a Type 2 dimension. However, given the fixed schedule nature of the data extraction system, it is possible that you will miss updates happening between one extract and the next.
 
+If you are leveraging dbt for your data modelling, and are comfortable with only capturing events whenever snapshots are taken and your dbt job runs, you can leverage their nice [built-in solution](https://docs.getdbt.com/docs/building-a-dbt-project/snapshots/) for building Type 2's from snapshots!
+
 ## Add database event logging
 
 Another alternative is to add a new event log. Each newly created or update record is stored in this log. At Shopify, we rely heavily on [Kafka](https://kafka.apache.org/intro) as a pipeline for transferring real time data between our applications and data land, which makes it an ideal candidate for implementing such a log.
