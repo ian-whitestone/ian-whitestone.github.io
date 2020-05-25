@@ -5,17 +5,15 @@ permalink: /projects/
 ---
 
 
-* [postgrez](https://github.com/ian-whitestone/postgrez): Python libary that acts as a wrapper for common [psycopg2](https://github.com/ian-whitestone/postgrez) routines: executing queries, retrieving query results, loading and exporting data
-
 * [Raspberry pi security system](https://github.com/ian-whitestone/rpi-security-system): Building a home security system with a raspberry pi + Python + Slack. Presented at PyCon Canada in 2017.
 
 * [Mapbox clustering prototype](https://github.com/ian-whitestone/mapbox-clustering): A template flask app that leverages leaflet's native clustering functionality to visualize earthquake data
 
-* Kid's Help Phone volunteer work: Some [python scripts](https://github.com/ian-whitestone/khp-data) to support some volunteer data infrastructure work for the [Kid's Help Phone](https://kidshelpphone.ca/) and [some R scripts](https://github.com/ian-whitestone/khp-analytics) for adhoc analysis
+* [IAM role double assume](https://github.com/ian-whitestone/iam-role-double-assume): Testing a unique use case for AWS' [Identity and Access Management](https://aws.amazon.com/iam/) service where I need to do a  "double assume role", i.e. from IAM user --> IAM role --> IAM role
 
-* [PySpark versus Dask](https://github.com/ian-whitestone/pyspark-vs-dask): Comparing [PySpark](https://spark.apache.org/docs/latest/api/python/index.html) and [dask](https://dask.org/) for speed, memory/CPU usage, and ease of use
+* [Toronto parking tickets](https://github.com/ian-whitestone/toronto-parking-tickets): Exploratory data analysis and data visualization of Toronto parking ticket data. 
 
-* [IAM Role Double Assume](https://github.com/ian-whitestone/iam-role-double-assume): Testing a unique use case for AWS' [Identity and Access Management](https://aws.amazon.com/iam/) service where I need to do a  "double assume role", i.e. from IAM user --> IAM role --> IAM role
+* [NBA Daily Fantasy Sports](https://github.com/ian-whitestone/nba-dfs): NBA Daily Fantasy Sports exploratory data analysis and player modelling with R
 
 * [OpenCV and Tessereact OCR on AWS Lambda](https://github.com/ian-whitestone/lambda-image-pipeline): Scripts and documentation for building AWS lambda runtimes with [OpenCV](https://opencv.org/) and [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)
 
@@ -23,14 +21,17 @@ permalink: /projects/
 
 * [Toronto apartment finder](https://github.com/ian-whitestone/toronto-apartment-finder): A slack bot to post relevant Toronto apartment listings from Kijiji & Craigslist
 
-* [2017 NBA Hackathon](https://github.com/ian-whitestone/nba-hackathon): Code for winning submission in the [2017 NBA hackathon](https://hackathon.nba.com/2017-hackathon-recap/). Our team performed cluster analysis of an NBA team’s customers and modeled their ticket purchase behavior, using marketing campaign and digital engagement data. The end product was a ticket purchase score would could be used to for targeted marketing campaigns. See another recap written [here](https://junkcharts.typepad.com/junk_charts/2017/09/report-from-the-nba-hackathon-2017.html).
+* [2017 NBA hackathon](https://github.com/ian-whitestone/nba-hackathon): Code for winning submission in the [2017 NBA hackathon](https://hackathon.nba.com/2017-hackathon-recap/). Our team performed cluster analysis of an NBA team’s customers and modeled their ticket purchase behavior, using marketing campaign and digital engagement data. The end product was a ticket purchase score would could be used to for targeted marketing campaigns. See another recap written [here](https://junkcharts.typepad.com/junk_charts/2017/09/report-from-the-nba-hackathon-2017.html).
 
+* [postgrez](https://github.com/ian-whitestone/postgrez): Python libary that acts as a wrapper for common [psycopg2](https://github.com/ian-whitestone/postgrez) routines: executing queries, retrieving query results, loading and exporting data
+
+* Kid's Help Phone volunteer work: Some [python scripts](https://github.com/ian-whitestone/khp-data) to support some volunteer data infrastructure work for the [Kid's Help Phone](https://kidshelpphone.ca/) and [some R scripts](https://github.com/ian-whitestone/khp-analytics) for adhoc analysis
+
+* [PySpark versus Dask](https://github.com/ian-whitestone/pyspark-vs-dask) [very WIP..hoping to coming back and finish]: Comparing [PySpark](https://spark.apache.org/docs/latest/api/python/index.html) and [dask](https://dask.org/) for speed, memory/CPU usage, and ease of use.
 
 * Cryptocurrency things: [Some scripts](https://github.com/ian-whitestone/crypto-data) for pulling historical cryptocurrency pricing data and then [some other ones](https://github.com/ian-whitestone/crypto-backtest) for backtesting different cryptocurrency trading strategies
 
 * [MLB salaries exploratory data analysis](https://github.com/ian-whitestone/mlb-salaries-eda): Exploratory data analysis for MLB player salaries as part of Udacity's [Intro to Data Analysis](https://www.udacity.com/course/intro-to-data-analysis--ud170) course
-
-* [Toronto Parking Tickets](https://github.com/ian-whitestone/toronto-parking-tickets): Exploratory data analysis and data visualization of Toronto parking ticket data. 
 
 * [Canada FSA mapper prototype](https://github.com/ian-whitestone/canada-fsa-mapper): A template flask app that leverages leaflet to map Canada's [FSA](https://en.wikipedia.org/wiki/Postal_codes_in_Canada#Forward_sortation_areas) boundaries, along with some scripts to parse shapefiles and load to a [PostGIS](https://postgis.net/) enabled database
 
@@ -39,8 +40,6 @@ permalink: /projects/
 * [Rent versus buy](https://github.com/ian-whitestone/rent-v-buy): A quick analysis of renting versus buying in Canada
 
 * [Enron person of interest classification](https://github.com/ian-whitestone/enron-poi-classification): Capstone project for Udacity's [Intro to Machine Learning Course](https://www.udacity.com/course/intro-to-machine-learning--ud120)
-
-* [NBA Daily Fantasy Sports](https://github.com/ian-whitestone/nba-dfs): NBA Daily Fantasy Sports exploratory data analysis and player modelling with R
 
 * [Datawrangling OpenStreetMap data](https://github.com/ian-whitestone/data-wrangling-openstreetmap): A report detailing the data auditing and cleaning performed on a raw dataset from [OpenStreetMap](https://www.openstreetmap.org/), as apart of Udacity's Data Wrangling course
 
