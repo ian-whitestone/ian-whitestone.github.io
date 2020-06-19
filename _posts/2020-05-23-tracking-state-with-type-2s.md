@@ -1,8 +1,13 @@
 ---
 layout: post
 title: Tracking state with type 2 dimensions
+author: ianwhitestone
+summary: My experiences tracking & modelling state over time.
 comments: true
+image: images/tracking-state-with-type-2s/monorail.png
 ---
+
+{% include head.html %}
 
 * TOC
 {:toc}
