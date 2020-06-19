@@ -337,3 +337,111 @@ I've leveraged the approaches outlined above with multiple data models now. Here
 This has been an iterative process to figure out, and takes investment from both data and engineering to successfully implement. With that said, we have found the analytical value of the resulting Type 2 models well worth the upfront effort. 
 
 Looking ahead, there's an ongoing project at Shopify by one of our data engineering teams to store the MySQL [binary logs](https://dev.mysql.com/doc/internals/en/binary-log-overview.html) (binlogs) in data land. Binlogs are a much better source for a log of data modifications, as they are directly tied to the source of truth (the MySQL database), and are much less susceptible to data loss than the Kafka based approach. With binlog extractions in place, you don't need to add separate Kafka event logging to every new model as changes will be automatically tracked for all tables. You don't need to worry about code changes or other processes making updates to the data model since the binlogs will always reflect the changes made to each table. I am optimistic that with binlogs as a new, more promising source for logging data modifications, along with the recipes outlined above, we can produce Type 2s out of the box for all new models. Everybody gets a Type 2!
+
+# Appendix: SQL Query Recipes
+
+Once we have our data modelled as a Type 2 dimension, there are a number of questions we can start easily answering:
+
+```sql
+/*
+The following queries were run in Postgres version 11.5
+
+user_language_type_2_dimension was created using the mock data from above.
+*/
+
+-- How many users are currently using Japanese?
+SELECT
+  COUNT(*) AS num_users
+FROM 
+  user_language_type_2_dimension
+WHERE
+  is_current
+  AND language='ja'
+;
+
+-- How many users were using Japanese 30 days ago?
+SELECT
+  COUNT(*) AS num_users
+FROM 
+  user_language_type_2_dimension
+WHERE
+  CURRENT_DATE - INTERVAL '30' DAY >= valid_from
+  AND CURRENT_DATE - INTERVAL '30' DAY < valid_to
+  AND language='ja'
+;
+
+-- How many users per language, per day?
+WITH 
+-- dynamically generate a distinct list of languages
+-- based on what is actually in the model
+all_languages AS (
+  SELECT 
+    language
+  FROM
+    user_language_type_2_dimension
+  GROUP BY 1
+),
+-- generate a range of dates we are interested in
+-- leverage database's built in calendar functionality
+-- if you don't have a date_dimension in your warehouse 
+date_range AS (
+  SELECT
+    date::date AS dt
+  FROM 
+    GENERATE_SERIES(DATE'2019-01-01', CURRENT_DATE, INTERVAL '1' DAY) as t(date)
+)
+SELECT
+  dr.dt,
+  al.language,
+  COUNT(DISTINCT ld.id) AS num_users
+FROM 
+  date_range AS dr
+  CROSS JOIN all_languages AS al
+  LEFT JOIN user_language_type_2_dimension AS ld
+    ON dr.dt >= ld.valid_from
+    AND dr.dt < ld.valid_to
+    AND al.language=ld.language
+GROUP BY 1,2
+;
+
+-- What is the 30-day retention rate of each language?
+WITH 
+user_languages AS (
+  SELECT 
+    id,
+    language,
+    MIN(valid_from) AS first_enabled_at,
+    MIN(valid_from) + INTERVAL '30' DAY AS first_enabled_at_plus_30d
+  FROM
+    user_language_type_2_dimension
+  GROUP BY 1,2
+),
+user_retention_inds AS (
+SELECT
+  ul.id,
+  ul.language,
+  first_enabled_at_plus_30d,
+  CASE
+    WHEN ld.id IS NOT NULL THEN 1
+    ELSE 0
+  END AS still_enabled_after_30d
+FROM 
+  user_languages AS ul
+  LEFT JOIN user_language_type_2_dimension AS ld
+    ON ul.first_enabled_at_plus_30d >= ld.valid_from
+    AND ul.first_enabled_at_plus_30d < ld.valid_to
+    AND ul.language=ld.language
+    AND ul.id=ld.id
+)
+SELECT
+  language,
+  COUNT(*) AS num_users_enabled_language_ever,
+  100.0*SUM(still_enabled_after_30d)/COUNT(*) AS language_30d_retention_rate
+FROM
+  user_retention_inds
+WHERE
+  -- only consider users where 30 days have passed since they enabled the language
+  first_enabled_at_plus_30d < CURRENT_DATE
+GROUP BY 1
+;
+```
