@@ -4,7 +4,7 @@ title: Tracking state with type 2 dimensions
 author: ianwhitestone
 summary: My experiences tracking & modelling state over time.
 comments: true
-image: images/tracking-state-with-type-2s/monorail.png
+image: images/tracking-state-with-type-2s/monorail_twitter.png
 ---
 
 {% include head.html %}

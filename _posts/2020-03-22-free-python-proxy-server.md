@@ -1,8 +1,13 @@
 ---
 layout: post
 title: A free, Python proxy server on AWS Lambda
+author: ianwhitestone
+summary: How to leverage Flask, AWS Lambda and Zappa to create a free proxy server.
 comments: true
+image: images/free-proxy-server/architecture.png
 ---
+
+{% include head.html %}
 
 Amazon Web Services' (AWS) serverless offering, [AWS Lambda](https://aws.amazon.com/lambda/), is part of their "always free tier". What that means is you get 1 million requests per month, or 3.2 million seconds of compute time per month, for free. Forever. 
 

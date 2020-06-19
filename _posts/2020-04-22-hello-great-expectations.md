@@ -1,6 +1,9 @@
 ---
 layout: post
 title: Up & running with Great Expectations
+author: ianwhitestone
+summary: How to easily get a set of data pipeline tests running for your application.
+image: images/hello-great-expectations/listing_cnts_w_threshold_twitter.png
 comments: true
 ---
 
