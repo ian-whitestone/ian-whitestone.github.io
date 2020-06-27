@@ -11,7 +11,7 @@ image: images/zappa.jpeg
 
 ## Background
 
-I am currently using [Zappa](https://github.com/Miserlou/Zappa) to manage a suite of lambda functions I have running on Amazon Web Services (AWS) to support a slack application I built; [domi](https://domi.cloud/). If you aren't familiar with Zappa, it vastly simplifies the process of creating, deploying and updating lambda functions using a Python runtime. You can learn more from the [zappa blog](https://github.com/Miserlou/zappa-blog) or [the slides](https://ianwhitestone.work/slides/python-meetup-sept-2019.html) from a talk I gave at a Toronto Python meetup.
+I am currently using [Zappa](https://github.com/Miserlou/Zappa) to manage a suite of lambda functions I have running on Amazon Web Services (AWS) to support a slack application I built; [domi](https://apartments.domi.cloud/). If you aren't familiar with Zappa, it vastly simplifies the process of creating, deploying and updating lambda functions using a Python runtime. You can learn more from the [zappa blog](https://github.com/Miserlou/zappa-blog) or [the slides](https://ianwhitestone.work/slides/python-meetup-sept-2019.html) from a talk I gave at a Toronto Python meetup.
 
 The configuration for each function is stored in the project's `zappa_settings.json` config file. I currently have 3 different lambda functions running to support my project. As a result, my `zappa_settings.json` looks something like this:
 
@@ -71,7 +71,7 @@ The configuration for each function is stored in the project's `zappa_settings.j
 }
 ```
 
-1) `app`: This is the flask app powering both the [domi site](https://domi.cloud/) and all the slack interactions. This function needs to be fast and responsive, hence the `"keep_warm": true` setting to deal with [lambda cold starts](https://mikhail.io/serverless/coldstarts/aws/) and the short timeout setting, the amount of time that Lambda allows a function to run before stopping it, of 3 seconds.
+1) `app`: This is the flask app powering both the [domi site](https://apartments.domi.cloud/) and all the slack interactions. This function needs to be fast and responsive, hence the `"keep_warm": true` setting to deal with [lambda cold starts](https://mikhail.io/serverless/coldstarts/aws/) and the short timeout setting, the amount of time that Lambda allows a function to run before stopping it, of 3 seconds.
 
 2) `batch`: This lambda runs all batch processes required by domi, like grabbing all new listings & processing them, or checking the status of existing listings. These processes take longer to run, so I have the max runtime set to 15 minutes (`"timeout_seconds": 900`).
 
@@ -79,13 +79,13 @@ The configuration for each function is stored in the project's `zappa_settings.j
 
 ## The Problem
 
-Even after excluding larger CSV, image & video files via the `exclude` setting, I am still above the [lambda deployment size limit](https://dzone.com/articles/exploring-aws-lambda-deployment-limits) due to the large python packages required for the price rank algorithm (pandas, numpy, scipy, matplotlib, PIL). 
+Even after excluding larger CSV, image & video files via the `exclude` setting, I am still above the [lambda deployment size limit](https://dzone.com/articles/exploring-aws-lambda-deployment-limits) due to the large python packages required for the price rank algorithm (pandas, numpy, scipy, matplotlib, PIL).
 
 <img src="{{ site.baseurl }}{% link images/zappa-zip-callback/package_sizes.png %}">
 
 To get around this, I use Zappa's [slim handler setting](https://github.com/Miserlou/Zappa#large-projects) (`"slim_handler": true`), which pulls down the dependencies from S3 at run time. This comes at a cost, since pulling down the required packages from S3 increases your startup time. For a warm lambda function, this isn't a problem, but when a bunch of new lambdas are being created in response to increased traffic (and hence going through the cold start), the longer response times become noticeable. Additionally, the deployment time is drastically increased as a file well over 100MB must be uploaded to AWS, which is especially problematic on bad wifi.
 
-Ideally, I could exclude all the large packages not required in the `app` and `batch` lambdas to get my deployment package under the size limit, and leave them in for the `price_rank` lambda. Intuitively, you'd think something like `"exclude": ["pandas", "numpy", "scipy"]` or `"exclude": ["*pandas*", "*numpy*', "*scipy*"]` would do the trick. But, Zappa currently does not provide support for directly excluding directories (read python packages) as discusssed [here](https://github.com/Miserlou/Zappa/issues/692#issuecomment-283012663). 
+Ideally, I could exclude all the large packages not required in the `app` and `batch` lambdas to get my deployment package under the size limit, and leave them in for the `price_rank` lambda. Intuitively, you'd think something like `"exclude": ["pandas", "numpy", "scipy"]` or `"exclude": ["*pandas*", "*numpy*', "*scipy*"]` would do the trick. But, Zappa currently does not provide support for directly excluding directories (read python packages) as discusssed [here](https://github.com/Miserlou/Zappa/issues/692#issuecomment-283012663).
 
 
 ## Solution
@@ -100,7 +100,7 @@ Luckily, Zappa was designed to handle flexible workflows by allowing for custom 
 }
 ```
 
-For this use case, we'll leverage the zip callback and run a function that removes unwanted packages from the deployment package prior to uploading. When Zappa callbacks are invoked, the [Zappa cli class instance is passed as a parameter](https://github.com/Miserlou/Zappa/blob/60fbb55fffa762a85e79e756f2a1373832d78320/zappa/cli.py#L1979-L1980). As a result, we can leverage the `zip_path` class attribute to grab the path of the deployment package. Additionally, since Zappa does not perform any config file parameter validation, we can add an additional attribute to the `zappa_settings.json` file, `regex_excludes`, and access that via the `zappa_settings` class attribute. We'll use the `regex_excludes` attribute to specify a list of regular expressions for files and/or directories we want to exclude. 
+For this use case, we'll leverage the zip callback and run a function that removes unwanted packages from the deployment package prior to uploading. When Zappa callbacks are invoked, the [Zappa cli class instance is passed as a parameter](https://github.com/Miserlou/Zappa/blob/60fbb55fffa762a85e79e756f2a1373832d78320/zappa/cli.py#L1979-L1980). As a result, we can leverage the `zip_path` class attribute to grab the path of the deployment package. Additionally, since Zappa does not perform any config file parameter validation, we can add an additional attribute to the `zappa_settings.json` file, `regex_excludes`, and access that via the `zappa_settings` class attribute. We'll use the `regex_excludes` attribute to specify a list of regular expressions for files and/or directories we want to exclude.
 
 Here's what I've added to the `zappa_settings.json` for the `app` and `batch` functions which don't require these Python packages.
 
@@ -119,7 +119,7 @@ The callback invokes the `main` function defined in `zappa_package_cleaner.py` w
 ```python
 def main(zappa):
     """Clean up zappa package before deploying to AWS
-    
+
     Args:
         zappa (ZappaCLI): ZappaCLI object from zappa/cli.py. Automatically
             gets passed in by callback initiation.

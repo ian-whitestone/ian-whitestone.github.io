@@ -13,7 +13,7 @@ comments: true
 {:toc}
 
 
-Data issues often go undetected but can wreak havoc on downstream models and dashboards once discovered. To combat this, data professionals should invest in automated data pipeline tests, which continuously validate data against a set of expectations. In the inaugural post; *[Down with Pipeline debt](https://medium.com/@expectgreatdata/down-with-pipeline-debt-introducing-great-expectations-862ddc46782a)*, the Python package [great-expectations](https://github.com/great-expectations/great_expectations) was announced as a powerful, open-source tool to help with this exact problem. In this post, I'll dive into the package and show how you can easily get a set of data pipeline tests up & running in production. I'll also highlight some ways I'm using the package to monitor a [live application](https://domi.cloud/) out in the wild.
+Data issues often go undetected but can wreak havoc on downstream models and dashboards once discovered. To combat this, data professionals should invest in automated data pipeline tests, which continuously validate data against a set of expectations. In the inaugural post; *[Down with Pipeline debt](https://medium.com/@expectgreatdata/down-with-pipeline-debt-introducing-great-expectations-862ddc46782a)*, the Python package [great-expectations](https://github.com/great-expectations/great_expectations) was announced as a powerful, open-source tool to help with this exact problem. In this post, I'll dive into the package and show how you can easily get a set of data pipeline tests up & running in production. I'll also highlight some ways I'm using the package to monitor a [live application](https://apartments.domi.cloud/) out in the wild.
 
 
 # hello, great expectations
@@ -44,7 +44,7 @@ else:
 1) We load in an existing batch of data and log our expectations for how the data should behave
 
 * This process is usually done once, and in an interactive environment, like jupyter. It requires lots of trial and error as you learn new things about your data and encode all your beliefs for how future data should behave.
-* Under the hood, the `ge.read_csv()` method is using [`pandas`](https://pandas.pydata.org/) to load a dataset from disk. Alternatively, a ge dataset can be initialized directly from an existing pandas dataset with `ge.from_pandas(my_pandas_df)`. Any subsequent expectations we create and run will be executed as operations against this underlying pandas dataframe. 
+* Under the hood, the `ge.read_csv()` method is using [`pandas`](https://pandas.pydata.org/) to load a dataset from disk. Alternatively, a ge dataset can be initialized directly from an existing pandas dataset with `ge.from_pandas(my_pandas_df)`. Any subsequent expectations we create and run will be executed as operations against this underlying pandas dataframe.
 * We explicitly state that we expect all values in the `id` column to be non-null. This is a very straightforward example, and something that can usually be handled by database schema constraints. Nonetheless, it illustrates the simple and declarative nature of ge. There are a whole host of other, more powerful expectations listed [here](https://great-expectations.readthedocs.io/en/latest/expectation_glossary.html).
 * We save our suite of expectations to disk. Here's what `my_expectations.json` looks like:
 
@@ -143,20 +143,20 @@ validation_results = test.validate(expectation_suite="my_expectations.json")
 
 # Case Study: Expectations for Apartment Listings
 
-[domi](https://domi.cloud/) is a side project I threw together, primarily for a learning experience. In a nutshell, it's an application that pulls listings from various apartment sites and sends users a custom feed of new listings in slack. domi is a data-intensive application, where data integrity is core to the product offering. Given this, it was imperative for me to have a set of data tests running on each new batch of data to ensure the data pipelines were functioning as expected. In the sections below, I'll walk you through a subset of the expectations I've been using in order to show you an example of ge out in the wild and explore more of the package's functionality.
+[domi](https://apartments.domi.cloud/) is a side project I threw together, primarily for a learning experience. In a nutshell, it's an application that pulls listings from various apartment sites and sends users a custom feed of new listings in slack. domi is a data-intensive application, where data integrity is core to the product offering. Given this, it was imperative for me to have a set of data tests running on each new batch of data to ensure the data pipelines were functioning as expected. In the sections below, I'll walk you through a subset of the expectations I've been using in order to show you an example of ge out in the wild and explore more of the package's functionality.
 
 
 ## Great Expectations Backends
 
-Before we move to discussing the expectations used for domi, a quick sidebar to ge's supported backends. In the section above, the code snippets I showed leveraged ge's `PandasDataset`. When choosing this option, your entire dataset must be read into memory, and subsequent validations will be run against that Pandas dataframe. This is a great option for most workflows, particularly due to the popularity of Pandas and the widespread familiarity with its API. 
+Before we move to discussing the expectations used for domi, a quick sidebar to ge's supported backends. In the section above, the code snippets I showed leveraged ge's `PandasDataset`. When choosing this option, your entire dataset must be read into memory, and subsequent validations will be run against that Pandas dataframe. This is a great option for most workflows, particularly due to the popularity of Pandas and the widespread familiarity with its API.
 
-ge also supports two other computational backends, a `SparkDataset` and a `SqlAlchemyDataset`. With the Spark dataset, you can have your data & ge validations processed in a Spark cluster. With the SQLAlchemy dataset, the ge validations will get automatically compiled and run as SQL queries, meaning your database acts as the computational workhorse. 
+ge also supports two other computational backends, a `SparkDataset` and a `SqlAlchemyDataset`. With the Spark dataset, you can have your data & ge validations processed in a Spark cluster. With the SQLAlchemy dataset, the ge validations will get automatically compiled and run as SQL queries, meaning your database acts as the computational workhorse.
 
 For my ge deployment with domi, I chose to use the `SqlAlchemyDataset`. Doing so allowed me to have a lightweight deployment, as the validations are all executed in the database where the data lives. Note, you should be thoughtful when doing this as having a bunch of validations (queries) running in your database may inadvertently affect your application performance. I was comfortable with this trade off since I (a) have virtually no users and (b) have my expectations running in the middle of the night.
 
 ## Basic Checks
 
-The process of authoring expectations requires you to build up an in-depth understanding of your data, and the associated system that produces it. This may seem arduous, but I can assure you that the long term payoff is worth it. 
+The process of authoring expectations requires you to build up an in-depth understanding of your data, and the associated system that produces it. This may seem arduous, but I can assure you that the long term payoff is worth it.
 
 In order for domi to function, it needs a fresh feed of new listings coming in each day. To validate this process is working as expected, we can implement a simple check for a minimum number of listings coming in each day.
 
@@ -164,7 +164,7 @@ In order for domi to function, it needs a fresh feed of new listings coming in e
     <img src="{{ site.baseurl }}{% link images/hello-great-expectations/listing_cnts.png %}">
 </p>
 
-Looking at historical data, data practioners can use their judgement to select threshold values to enforce. When creating expectations retro-actively, you can easily backtest them to see how often your new batches would be in violation. For this use case, I selected the minimum number of daily listings to be 250. 
+Looking at historical data, data practioners can use their judgement to select threshold values to enforce. When creating expectations retro-actively, you can easily backtest them to see how often your new batches would be in violation. For this use case, I selected the minimum number of daily listings to be 250.
 
 <p align="center">
     <img src="{{ site.baseurl }}{% link images/hello-great-expectations/listing_cnts_w_threshold.png %}">
@@ -181,7 +181,7 @@ import os
 from great_expectations.dataset import SqlAlchemyDataset
 from sqlalchemy import create_engine
 
-# Manually establish database connection and create dataset. 
+# Manually establish database connection and create dataset.
 # In a future post, I will show how ge can automatically take
 # care of this connection setup
 db_string = "postgres://{user}:{password}@{host}:{port}/{dbname}".format(
@@ -231,9 +231,9 @@ With our process above, you can see that we created the expectation suite using 
 ```python
 query = """
     SELECT *
-    FROM 
-        listings 
-    WHERE 
+    FROM
+        listings
+    WHERE
         DATE_TRUNC('day', created_at) = CURRENT_DATE - INTERVAL '1' DAY
 """
 recent_listings = SqlAlchemyDataset(custom_sql=query, engine=db_engine)
@@ -255,19 +255,19 @@ In the apartment hunting world, a common way to categorize listings is by the nu
     <img src="{{ site.baseurl }}{% link images/hello-great-expectations/bedrooms_distribution.png %}">
 </p>
 
-Let's say we want to detect changes in the distribution of bedroom counts. We could be interested in doing this to understand shifts in the market, or potential data issues where users posting the listings are omitting the field. In my case, the field is used as an input to domi's [price rank model](https://domi.cloud/instructions#price_rank), so it's important for me to be aware of any distribution shifts.
+Let's say we want to detect changes in the distribution of bedroom counts. We could be interested in doing this to understand shifts in the market, or potential data issues where users posting the listings are omitting the field. In my case, the field is used as an input to domi's [price rank model](https://apartments.domi.cloud/instructions#price_rank), so it's important for me to be aware of any distribution shifts.
 
 
 ge comes with an implementation of the [Chi-squared test](https://en.wikipedia.org/wiki/Chi-squared_test), which is a common test used to compare two categorial variable distributions. Implementing this test is fairly simple. You calculate your expected weights of each category (fractions - see values in graph above) and specify them when creating the expectation.
 
 ```python
 listings.expect_column_chisquare_test_p_value_to_be_greater_than(
-  column='bedrooms_bucket', 
+  column='bedrooms_bucket',
   partition_object={
     "values": ['0', '1', '2', '3', '4+'],
     "weights": [0.07, 0.37, 0.42, 0.10, 0.04],
   },
-  p=0.05 
+  p=0.05
 )
 ```
 
@@ -275,7 +275,7 @@ Another important step when creating distributional expectations is backtesting.
 
 ## Extending Great Expectations with Custom Expectations
 
-Another input to the [price rank model](https://domi.cloud/instructions#price_rank) is the apartment size:
+Another input to the [price rank model](https://apartments.domi.cloud/instructions#price_rank) is the apartment size:
 
 <p align="center">
     <img src="{{ site.baseurl }}{% link images/hello-great-expectations/size_distribution.png %}">
@@ -347,20 +347,20 @@ class CustomSqlAlchemyDataset(SqlAlchemyDataset):
     @DataAsset.expectation(["column", "distribution", "p_value"])
     def expect_column_parameterized_distribution_ks_test_p_value_to_be_greater_than(
             self,
-            column, 
+            column,
             distribution,
-            p_value=0.05, 
+            p_value=0.05,
             params=None,
             result_format=None,
             include_config=True,
-            catch_exceptions=None, 
+            catch_exceptions=None,
             meta=None
     ):
         if p_value <= 0 or p_value >= 1:
             raise ValueError("p_value must be between 0 and 1")
 
         positional_parameters = (params['s'], params['loc'], params['scale'])
-        
+
         rows = self.engine.execute(sa.select([
             sa.column(column)
         ]).select_from(self._table)).fetchall()
@@ -433,9 +433,9 @@ db_string = "postgres://{user}:{password}@{host}:{port}/{dbname}".format(
 db_engine = create_engine(db_string)
 query = """
     SELECT *
-    FROM 
-        listings 
-    WHERE 
+    FROM
+        listings
+    WHERE
         DATE_TRUNC('day', created_at) = CURRENT_DATE - INTERVAL '1' DAY
 """
 recent_listings = SqlAlchemyDataset(custom_sql=query, engine=db_engine)
