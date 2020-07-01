@@ -2,8 +2,12 @@
 layout: default
 ---
 
-<div class="posts">
+<ul class="posts">
   {% for post in site.posts %}
-  <h3><a href="{{ site.baseurl }}{{ post.url }}">{{ post.date | date: "%Y-%m-%d" }}: {{ post.title }}</a></h3>
+  {% if post.draft != true %}
+  <li>
+    <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>: <i>{{ post.date | date: "%d %b %Y" }}</i>
+  </li>
+  {% endif %}
   {% endfor %}
-</div>
+</ul>
