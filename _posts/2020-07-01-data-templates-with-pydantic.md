@@ -55,7 +55,7 @@ def test_pipeline(input_template):
 In the snippet above, `sample_input_df` will be a new PySpark dataframe with 2 records. There are two great things going on under the hood here that make `DataTemplate` truly magical.
 
 1. **Defaults values**. Often times, you only want to introduce minor perturbations to a base record, without having to re-specify the entire thing. With `DataTemplate`, I don't need to explicitly define every field each time. I can rapidly create new records by only changing the fields that are relevant to my current use case. This is especially useful when you are dealing with wide data, which is often the case.
-2. **Data validation against a schema**. Behind the scenes, the `DataTemplate` class validates each record (dictionary) I provide against the specified schema (or "contract"). This helps catch errors in your test data and helps ensure it will conform to a certain standard.
+2. **Data validation against a schema**. Behind the scenes, the `DataTemplate` class validates each record (dictionary) I provide against the specified schema (or "contract"). This helps catch errors in your test data and ensures it will conform to a certain standard.
 
 `DataTemplate` is incredibly useful but is tightly coupled to our PySpark ETL framework. Recently, I've been working on a data heavy application that doesn't use Spark. Instead, I'm pulling data in & out of a Postgres database, processing it in memory with Pandas or standard Python data types, and occasionally using [Dask](https://docs.dask.org/en/latest/) when it doesn't fit in memory. So how can we re-create this beauty?
 
@@ -216,14 +216,18 @@ DataTemplate({'id': 1, 'first_name': 'Foo', 'last_name': 'Bar',
   'created_at': datetime.datetime(2020, 1, 1, 0, 0),
   'updated_at': datetime.datetime(2020, 1, 1, 0, 0)}]
 
+# Generate a pandas dataframe
 >>> user_data_template.dataframe([
 ...     {},
 ...     {"id": 2},
 ...     {"id": 3, "last_name": "Baz"},
 ...     {"id": 4, "first_name": "🇨🇦", "last_name": None, 'created_at': datetime(1867,7, 1)}
 ... ])
-# spits out a pandas dataframe
-# (see output in screenshot up top 👆)
+   id first_name last_name created_at updated_at
+0   1        Foo       Bar 2020-01-01 2020-01-01
+1   2        Foo       Bar 2020-01-01 2020-01-01
+2   3        Foo       Baz 2020-01-01 2020-01-01
+3   4         🇨🇦      None 1867-07-01 2020-01-01
 ```
 
 Because `DataTemplate` is just calling your pydantic model, you get the same nice data validation & useful error messages as showed above:
@@ -251,6 +255,8 @@ ValidationError: 1 validation error for User
 id
   value is not a valid integer (type=type_error.integer)
 ```
+
+Be sure to check out the [pydantic docs](https://pydantic-docs.helpmanual.io/usage/types/) to see all the other types of fields you can specify and the associated validations.
 
 ## DataTemplate in action
 
@@ -290,37 +296,39 @@ import pytest
 from somewhere import DataTemplate
 from somewhere import get_user_post_count
 
-class User(BaseModel):
-    id: int = 1
-    first_name: str = "Foo"
-    last_name: Optional[str] = "Bar"
-    created_at: datetime = datetime(2020, 1, 1)
-    updated_at: datetime = datetime(2020, 1, 1)
-
-class Post(BaseModel):
-    id: int = 1
-    user_id: int = 1
-    content: Optional[str]
-    created_at: datetime = datetime(2020, 1, 1)
-    updated_at: datetime = datetime(2020, 1, 1)
-
-class Output(BaseModel):
-    user_id: int = 1
-    post_count: int = 0
-
 @pytest.fixture
 def user_data_template():
+    class User(BaseModel):
+        id: int = 1
+        first_name: str = "Foo"
+        last_name: Optional[str] = "Bar"
+        created_at: datetime = datetime(2020, 1, 1)
+        updated_at: datetime = datetime(2020, 1, 1)
     return DataTemplate(User)
 
 @pytest.fixture
 def post_data_template():
+    class Post(BaseModel):
+        id: int = 1
+        user_id: int = 1
+        content: Optional[str]
+        created_at: datetime = datetime(2020, 1, 1)
+        updated_at: datetime = datetime(2020, 1, 1)
     return DataTemplate(Post)
 
 @pytest.fixture
 def output_data_template():
+    class Output(BaseModel):
+        user_id: int = 1
+        post_count: int = 0
     return DataTemplate(Output)
+```
 
+Above, I've created three test fixtures for each dataframe involved in the pipeline. In this scenario, I'm only using the pydantic models for the test cases, so I've nested them in the fixtures themselves. However, wherever possible, you should integrate these models into your actual pipeline so you can get the same data validation benefits at runtime and catch issues early on before they unknowingly percolate downstream.
 
+Now we can easily use these fixtures in our test cases to quickly generate sample dataframes:
+
+```python
 def test_get_user_post_count(user_data_template, post_data_template, output_data_template):
     user_df = user_data_template.dataframe(
         [
