@@ -4,10 +4,15 @@ layout: default
 
 <ul class="posts">
   {% for post in site.posts %}
-  {% if post.draft != true %}
+  {% assign post_date =  post.date | date: '%m-%d' %}
   <li>
-    <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>: <i>{{ post.date | date: "%d %b %Y" }}</i>
+    <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a> -
+    {% if post_date == "07-01"  %}
+    <i>{{ post.date | date: "%-d %b %Y" }} 🇨🇦</i>
+    {% else %}
+    <i>{{ post.date | date: "%-d %b %Y" }}</i>
+    {% endif %}
   </li>
-  {% endif %}
   {% endfor %}
+
 </ul>
