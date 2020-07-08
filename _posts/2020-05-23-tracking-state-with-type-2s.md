@@ -30,17 +30,17 @@ But, as analysts, we not only care about the **current state** (how many users a
 | 2  | true              | 2019-01-01 15:21:45 | 2019-01-02 05:20:00 | false      |
 | 2  | false             | 2019-01-02 05:20:00 |                     | true       |
 
-This is known as a [Type 2 dimensional model](https://www.oracle.com/webfolder/technetwork/tutorials/obe/db/10g/r2/owb/owb10gr2_gs/owb/lesson3/slowlychangingdimensions.htm). In this post, I'll show how you can create these data models using modern ETL tooling like [PySpark](https://spark.apache.org/docs/latest/api/python/index.html) and [dbt (data build tool)](https://www.getdbt.com/). 
+This is known as a [Type 2 dimensional model](https://www.oracle.com/webfolder/technetwork/tutorials/obe/db/10g/r2/owb/owb10gr2_gs/owb/lesson3/slowlychangingdimensions.htm). In this post, I'll show how you can create these data models using modern ETL tooling like [PySpark](https://spark.apache.org/docs/latest/api/python/index.html) and [dbt (data build tool)](https://www.getdbt.com/).
 
 # Background & Motivation
 
-I currently work at [Shopify](https://www.shopify.com/) as a data scientist in the International product line. Our product line is focused on adapting and scaling our product around the world. One of the first major efforts we undertook was [translating Shopify's admin](https://engineering.shopify.com/blogs/engineering/lost-in-translations?_pos=1&_sid=4c9b4bdb5&_ss=r) in order to make our software available to use in multiple languages other than English. 
+I currently work at [Shopify](https://www.shopify.com/) as a data scientist in the International product line. Our product line is focused on adapting and scaling our product around the world. One of the first major efforts we undertook was [translating Shopify's admin](https://engineering.shopify.com/blogs/engineering/lost-in-translations?_pos=1&_sid=4c9b4bdb5&_ss=r) in order to make our software available to use in multiple languages other than English.
 
 <p align="center">
     <img src="{{ site.baseurl }}{% link images/tracking-state-with-type-2s/translated_shopify.png %}">
 </p>
 
-At Shopify, data scientists [work across the full stack](https://multithreaded.stitchfix.com/blog/2019/03/11/FullStackDS-Generalists/) - from data sourcing and instrumentation, to data modelling, dashboards, analytics and machine learning based products. As a product data scientist, I was responsible for understanding how our translated versions of the product were performing. How many users were adopting them? How was adoption changing over time? Were they retaining the new language, or switching back to English? If we defaulted a new user from Japan into Japanese, were they more likely to become a paying customer than if they were first exposed to the product in English and given the option to switch? The first step in the process of answering all these questions was figuring out how our data could be sourced or instrumented, and then eventually modelled into a format that allowed me to answer these questions. 
+At Shopify, data scientists [work across the full stack](https://multithreaded.stitchfix.com/blog/2019/03/11/FullStackDS-Generalists/) - from data sourcing and instrumentation, to data modelling, dashboards, analytics and machine learning based products. As a product data scientist, I was responsible for understanding how our translated versions of the product were performing. How many users were adopting them? How was adoption changing over time? Were they retaining the new language, or switching back to English? If we defaulted a new user from Japan into Japanese, were they more likely to become a paying customer than if they were first exposed to the product in English and given the option to switch? The first step in the process of answering all these questions was figuring out how our data could be sourced or instrumented, and then eventually modelled into a format that allowed me to answer these questions.
 
 The functionality to decide which language to render Shopify in is based on the `language` setting our engineers had added to the `users` data model. Also living in this model were a bunch of other fields we will ignore.
 
@@ -67,7 +67,7 @@ In the user language scenario discussed above, the `language` field was added to
 
 ## Stitch together database snapshots
 
-At most technology companies, snapshots of application database tables are extracted into the data warehouse or data lake. At Shopify, we have a system that extracts newly created or updated records from the application databases on a fixed schedule. 
+At most technology companies, snapshots of application database tables are extracted into the data warehouse or data lake. At Shopify, we have a system that extracts newly created or updated records from the application databases on a fixed schedule.
 
 <p align="center">
     <img src="{{ site.baseurl }}{% link images/tracking-state-with-type-2s/longboat.png %}">
@@ -91,7 +91,7 @@ If you work closely with engineers, or are comfortable working in your applicati
 class User < ApplicationRecord
 
   after_commit :log_record_change
- 
+
   def log_record_change
     # produce a copy of the record to Kafka after the record has been
     # successfully updated or created in the database (monorail is the
@@ -168,7 +168,7 @@ user_update_rows = [
     (1, "en", get_dt('2019-01-01 12:14:23'), get_dt('2019-01-01 12:14:23')),
     (2, "en", get_dt('2019-02-02 11:00:35'), get_dt('2019-02-02 11:00:35')),
     (2, "fr", get_dt('2019-02-02 11:00:35'), get_dt('2019-02-02 12:15:06')),
-    (2, "fr", get_dt('2019-02-02 11:00:35'), get_dt('2019-02-02 13:01:17')), 
+    (2, "fr", get_dt('2019-02-02 11:00:35'), get_dt('2019-02-02 13:01:17')),
     (2, "en", get_dt('2019-02-02 11:00:35'), get_dt('2019-02-02 14:10:01')),
 ]
 
@@ -192,11 +192,11 @@ job_run_time = F.lit(dt.now())
 user_language_changes = (
     user_update_events
     .withColumn(
-        'prev_language', 
+        'prev_language',
         F.lag(F.col('language')).over(window_spec)
     )
     .withColumn(
-        'row_num', 
+        'row_num',
         F.row_number().over(window_spec)
     )
     .where(change_expression)
@@ -221,9 +221,9 @@ The last step is fairly simple. We produce one record per period for which a giv
 user_language_type_2_dimension = (
     user_language_changes
     .withColumn(
-        'valid_to', 
+        'valid_to',
         F.coalesce(
-            F.lead(F.col('updated_at')).over(window_spec), 
+            F.lead(F.col('updated_at')).over(window_spec),
             # fill nulls with job run time
             # can also use timestamp of your last event
             job_run_time
@@ -231,7 +231,7 @@ user_language_type_2_dimension = (
     )
     .withColumnRenamed('updated_at', 'valid_from')
     .withColumn(
-        'is_current', 
+        'is_current',
         F.when(F.col('valid_to') == job_run_time, True).otherwise(False)
     )
 )
@@ -257,11 +257,11 @@ dbt (data build tool) is an open source tool that lets you build new data models
 WITH
 -- create our sample data
 user_update_events (id, language, created_at, updated_at) AS (
-  VALUES 
-  (1, 'en', timestamp'2019-01-01 12:14:23', timestamp'2019-01-01 12:14:23'), 
-  (2, 'en', timestamp'2019-02-02 11:00:35', timestamp'2019-02-02 11:00:35'), 
-  (2, 'fr', timestamp'2019-02-02 11:00:35', timestamp'2019-02-02 12:15:06'), 
-  (2, 'fr', timestamp'2019-02-02 11:00:35', timestamp'2019-02-02 13:01:17'), 
+  VALUES
+  (1, 'en', timestamp'2019-01-01 12:14:23', timestamp'2019-01-01 12:14:23'),
+  (2, 'en', timestamp'2019-02-02 11:00:35', timestamp'2019-02-02 11:00:35'),
+  (2, 'fr', timestamp'2019-02-02 11:00:35', timestamp'2019-02-02 12:15:06'),
+  (2, 'fr', timestamp'2019-02-02 11:00:35', timestamp'2019-02-02 13:01:17'),
   (2, 'en', timestamp'2020-01-01 15:05', timestamp'2019-02-02 14:10:01')
 ),
 users_with_previous_state AS (
@@ -270,14 +270,14 @@ users_with_previous_state AS (
     language,
     updated_at,
     LAG(language) OVER (PARTITION BY id ORDER BY updated_at ASC) AS prev_language,
-    ROW_NUMBER() OVER (PARTITION BY id ORDER BY updated_at ASC) AS row_num 
-  FROM 
+    ROW_NUMBER() OVER (PARTITION BY id ORDER BY updated_at ASC) AS row_num
+  FROM
     user_update_events
 ),
 -- filter to instances where the column of interest (language) actually changed
 -- or we are seeing a user record for the first time
 user_language_changes AS (
-  SELECT 
+  SELECT
     *
   FROM
     users_with_previous_state
@@ -287,12 +287,12 @@ user_language_changes AS (
 ),
 -- build the type 2!
 user_language_type_2_dimension_base AS (
-  SELECT 
+  SELECT
     id,
     language,
     updated_at AS valid_from,
     LEAD(updated_at) OVER (PARTITION BY id ORDER BY updated_at ASC) AS valid_to
-  FROM 
+  FROM
     user_language_changes
 )
 -- fill "valid_to" nulls with job run time
@@ -302,11 +302,11 @@ SELECT
   language,
   valid_from,
   COALESCE(valid_to, CURRENT_TIMESTAMP) AS valid_to,
-  CASE 
+  CASE
     WHEN valid_to IS NULL THEN True
     ELSE False
   END AS is_current
-FROM 
+FROM
   user_language_type_2_dimension_base
 ```
 
@@ -334,7 +334,7 @@ I've leveraged the approaches outlined above with multiple data models now. Here
     * One way around this is to have the engineers modify the table design to use [soft deletes](https://guides.cfwheels.org/docs/soft-delete) instead of hard deletes.
     * Alternatively, you can add a new field to your Kafka schema and log the type of event that triggered the change, i.e. (`create`, `update` or `delete`), and then handle accordingly in your Type 2 model code.
 
-This has been an iterative process to figure out, and takes investment from both data and engineering to successfully implement. With that said, we have found the analytical value of the resulting Type 2 models well worth the upfront effort. 
+This has been an iterative process to figure out, and takes investment from both data and engineering to successfully implement. With that said, we have found the analytical value of the resulting Type 2 models well worth the upfront effort.
 
 Looking ahead, there's an ongoing project at Shopify by one of our data engineering teams to store the MySQL [binary logs](https://dev.mysql.com/doc/internals/en/binary-log-overview.html) (binlogs) in data land. Binlogs are a much better source for a log of data modifications, as they are directly tied to the source of truth (the MySQL database), and are much less susceptible to data loss than the Kafka based approach. With binlog extractions in place, you don't need to add separate Kafka event logging to every new model as changes will be automatically tracked for all tables. You don't need to worry about code changes or other processes making updates to the data model since the binlogs will always reflect the changes made to each table. I am optimistic that with binlogs as a new, more promising source for logging data modifications, along with the recipes outlined above, we can produce Type 2s out of the box for all new models. Everybody gets a Type 2!
 
@@ -352,7 +352,7 @@ user_language_type_2_dimension was created using the mock data from above.
 -- How many users are currently using Japanese?
 SELECT
   COUNT(*) AS num_users
-FROM 
+FROM
   user_language_type_2_dimension
 WHERE
   is_current
@@ -362,7 +362,7 @@ WHERE
 -- How many users were using Japanese 30 days ago?
 SELECT
   COUNT(*) AS num_users
-FROM 
+FROM
   user_language_type_2_dimension
 WHERE
   CURRENT_DATE - INTERVAL '30' DAY >= valid_from
@@ -371,11 +371,11 @@ WHERE
 ;
 
 -- How many users per language, per day?
-WITH 
+WITH
 -- dynamically generate a distinct list of languages
 -- based on what is actually in the model
 all_languages AS (
-  SELECT 
+  SELECT
     language
   FROM
     user_language_type_2_dimension
@@ -383,18 +383,18 @@ all_languages AS (
 ),
 -- generate a range of dates we are interested in
 -- leverage database's built in calendar functionality
--- if you don't have a date_dimension in your warehouse 
+-- if you don't have a date_dimension in your warehouse
 date_range AS (
   SELECT
     date::date AS dt
-  FROM 
+  FROM
     GENERATE_SERIES(DATE'2019-01-01', CURRENT_DATE, INTERVAL '1' DAY) as t(date)
 )
 SELECT
   dr.dt,
   al.language,
   COUNT(DISTINCT ld.id) AS num_users
-FROM 
+FROM
   date_range AS dr
   CROSS JOIN all_languages AS al
   LEFT JOIN user_language_type_2_dimension AS ld
@@ -405,9 +405,9 @@ GROUP BY 1,2
 ;
 
 -- What is the 30-day retention rate of each language?
-WITH 
+WITH
 user_languages AS (
-  SELECT 
+  SELECT
     id,
     language,
     MIN(valid_from) AS first_enabled_at,
@@ -425,7 +425,7 @@ SELECT
     WHEN ld.id IS NOT NULL THEN 1
     ELSE 0
   END AS still_enabled_after_30d
-FROM 
+FROM
   user_languages AS ul
   LEFT JOIN user_language_type_2_dimension AS ld
     ON ul.first_enabled_at_plus_30d >= ld.valid_from
