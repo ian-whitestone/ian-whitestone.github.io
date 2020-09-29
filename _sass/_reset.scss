@@ -75,3 +75,13 @@ table {
 *, *:before, *:after {
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 }
+
+// Fix superscript/subscript styling.. https://github.com/barryclark/jekyll-now/pull/1653/files
+sub {
+	font-size: smaller;
+	vertical-align: sub;
+}
+sup {
+	font-size: smaller;
+	vertical-align: super;
+}
