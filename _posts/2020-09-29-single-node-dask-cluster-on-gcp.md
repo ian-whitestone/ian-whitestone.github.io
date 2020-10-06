@@ -93,7 +93,9 @@ Here's what it looks like in action:
 1. Spin up the Compute Engine instance using the CLI. This takes ~15 seconds, then you'll need to wait another minute or so for the docker container & dask processes to get kicked off.
 2. I connect the cluster to the [dask jupyter lab extension](https://github.com/dask/dask-labextension) so I can view my cluster diagnostics without opening a separate window/tab (literally works like magic ✨).
 3. I connect my Python session to the cluster with `Client('tcp://<machines_external_ip_address>:8786)`.
-4. I send some work to the cluster and get the results back.
+4. I send some work to the cluster, it automatically distributes it among the workers (processes in this single node cluster), then sends back the results.
+5. Profit
+
 
 Pretty simple & works like a charm. You can later tear down the instance easily with:
 
