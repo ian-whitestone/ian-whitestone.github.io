@@ -108,7 +108,7 @@ It's not **all** sunshine and roses<sup>6</sup>. A few things worth mentioning:
 * In the motivation section I described how I wanted to keep working locally, but ocassionally send tasks to the cloud for computation. This means that any data being used in your functions must get sent to the cluster. If your dataset is large, you'll want to consider sticking it in cloud storage, and then having the dataset get read in by the cluster in your first step of the task graph.
 * The "launch with container" feature on Compute Engine is not available via the API, meaning you can't easily do things like programatically spin up a cluster in pure Python like they do in [this example](https://cloud.google.com/compute/docs/tutorials/python-guide).
 * Authentication & security. With the example described above, literally anyone could start executing commands in my cluster. I'm okay with this for a few reasons. One, my cluster is usually up for an hour or two whenever I want to run something, then I tear it down. Two, both my docker container and the Compute Engine instance have access to nothing. No environment variables or credentials baked into the docker image, and the instance only has access to write logs (see the `--scopes` argument above). Nonetheless, **I cannot recommend** doing this to anyone. To add more security you can leverage Dask's [builtin support for TLS/SSL](https://distributed.dask.org/en/latest/tls.html).
-
+    * **Update:** see how to solve for this in [my follow up post]({% post_url 2020-11-14-dask-cluster-security %})
 
 <hr>
 

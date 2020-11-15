@@ -25,7 +25,7 @@ The configuration for each function is stored in the project's `zappa_settings.j
         "project_name": "domi",
         "runtime": "python3.7",
         "s3_bucket": "domi",
-        "domain": "domi.cloud",
+        "domain": "apartments.domi.cloud",
         "keep_warm": true,
         "keep_warm_expression": "cron(0/3 12-4 ? * * *)",
         "timeout_seconds": 3,

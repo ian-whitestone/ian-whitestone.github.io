@@ -14,7 +14,7 @@ image: images/serverless-deployments-github-actions/slack_alerts.png
 
 # Intro to Github Actions
 
-[Github Actions](https://github.com/features/actions) is an API for cause and effect on GitHub, which became generally available on November 13, 2019. Actions lets you trigger a workflow in response to a [number of different events](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows). While I believe it is most commonly used for CI/CD pipelines, it can also be used for other automation tasks, like scheduling a job to [automatically clean up stale issues](https://github.com/actions/stale) in your project. One of the coolest things about Github Actions is the [actions marketplace](https://github.com/marketplace?type=actions). As of this writing, it has close to 2000 prebuilt actions you can plug into your workflows and use. Useful things like [configuring AWS credentials](https://github.com/marketplace/actions/configure-aws-credentials-action-for-github-actions) are available as actions so that you don't want to have to build everything yourself. 
+[Github Actions](https://github.com/features/actions) is an API for cause and effect on GitHub, which became generally available on November 13, 2019. Actions lets you trigger a workflow in response to a [number of different events](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows). While I believe it is most commonly used for CI/CD pipelines, it can also be used for other automation tasks, like scheduling a job to [automatically clean up stale issues](https://github.com/actions/stale) in your project. One of the coolest things about Github Actions is the [actions marketplace](https://github.com/marketplace?type=actions). As of this writing, it has close to 2000 prebuilt actions you can plug into your workflows and use. Useful things like [configuring AWS credentials](https://github.com/marketplace/actions/configure-aws-credentials-action-for-github-actions) are available as actions so that you don't want to have to build everything yourself.
 
 Github Actions is a good choice for a CI/CD solution for side projects. As shown on their [pricing page](https://github.com/pricing) (as of 2020-01-19), they have a great free tier which lets you use it on any of your repositories, private ones included, unlike popular alternatives like Travis.
 
@@ -80,7 +80,7 @@ The output would be `bar`, as expected.
 
 # Zappa Deployments
 
-I am currently using [Zappa](https://github.com/Miserlou/Zappa) to manage a suite of lambda functions I have running on Amazon Web Services (AWS) to support a slack application I built; [domi](https://domi.cloud/). If you aren't familiar with Zappa, it vastly simplifies the process of creating, deploying and updating lambda functions using a Python runtime. You can learn more from the [zappa blog](https://github.com/Miserlou/zappa-blog) or [the slides](https://ianwhitestone.work/slides/python-meetup-sept-2019.html) from a talk I gave at a Toronto Python meetup.
+I am currently using [Zappa](https://github.com/Miserlou/Zappa) to manage a suite of lambda functions I have running on Amazon Web Services (AWS) to support a slack application I built; [domi](https://apartments.domi.cloud/). If you aren't familiar with Zappa, it vastly simplifies the process of creating, deploying and updating lambda functions using a Python runtime. You can learn more from the [zappa blog](https://github.com/Miserlou/zappa-blog) or [the slides](https://ianwhitestone.work/slides/python-meetup-sept-2019.html) from a talk I gave at a Toronto Python meetup.
 
 In terms of a CI/CD pipeline, I have two simple requirements:
 
@@ -126,7 +126,7 @@ jobs:
     - name: Set up Python 3.7
       uses: actions/setup-python@v1
       with:
-        python-version: 3.7  
+        python-version: 3.7
 ```
 
 Next, we'll install `libpq-dev`, which is a requirement for the `psycopg2` library, and `pipenv` which I am using to manage virtual environments.
@@ -156,7 +156,7 @@ Next, we create our virtual environment and install all the dependencies with pi
 
 ```yaml
     - name: Install dependencies
-      if: steps.cache-pipenv.outputs.cache-hit != 'true' 
+      if: steps.cache-pipenv.outputs.cache-hit != 'true'
       run: pipenv install
 ```
 
@@ -164,7 +164,7 @@ The first time your job runs on a pull request, it will result in a cache miss s
 
 <img src="{{ site.baseurl }}{% link images/serverless-deployments-github-actions/cache_miss.png %}">
 
-For all consecutive invocations of the workflow on the given PR, you will hit the cache and skip the expensive "Install dependencies" step (assuming you don't change any of the requirements in your sequential commits). 
+For all consecutive invocations of the workflow on the given PR, you will hit the cache and skip the expensive "Install dependencies" step (assuming you don't change any of the requirements in your sequential commits).
 
 <img src="{{ site.baseurl }}{% link images/serverless-deployments-github-actions/cache_hit.png %}">
 
@@ -212,7 +212,7 @@ jobs:
     - name: Set up Python 3.7
       uses: actions/setup-python@v1
       with:
-        python-version: 3.7    
+        python-version: 3.7
 
     - name: Install pipenv and libpq
       run: |
@@ -227,7 +227,7 @@ jobs:
         key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
 
     - name: Install dependencies
-      if: steps.cache-pipenv.outputs.cache-hit != 'true' 
+      if: steps.cache-pipenv.outputs.cache-hit != 'true'
       run: pipenv install
 
     - name: Code quality checks
@@ -336,7 +336,7 @@ jobs:
       with:
         path: ~/.local/share/virtualenvs
         key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-    
+
     - name: Install dependencies
       if: steps.cache-pipenv.outputs.cache-hit != 'true'
       run: pipenv install
