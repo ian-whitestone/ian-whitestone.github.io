@@ -32,7 +32,7 @@ RUN echo "$DASK_CLUSTER_CERT" > ~/dask-cluster-cert.pem
 RUN echo "$DASK_CLUSTER_KEY" > ~/dask-cluster-key.pem
 ```
 
-With the files on disk in the running container, we can now point the scheduler & worker jobs directly to them:
+With the files on disk in the running container, we can now point the scheduler & worker jobs directly to them. Note that we are now using the TLS protocol when specifying the host, as opposed to TCP which we used previously.
 
 ```bash
 # Start the dask scheduler & workers
@@ -87,13 +87,15 @@ from distributed.security import Security
 
 from config import DASK_CERT_FILEPATH, DASK_KEY_FILEPATH
 
+cluster_host_ip = '35.202.12.207'
 sec = Security(
     tls_ca_file=DASK_CERT_FILEPATH,
     tls_client_cert=DASK_CERT_FILEPATH,
     tls_client_key=DASK_KEY_FILEPATH,
     require_encryption=True,
 )
-client = Client(f"tls://{cluster_host}", security=sec)
+# Using TLS now instead of TCP!
+client = Client(f"tls://{cluster_host_ip}:8786", security=sec)
 ```
 
 And that's it, **no more bad guys!**
