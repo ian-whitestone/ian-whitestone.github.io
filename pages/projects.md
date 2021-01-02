@@ -4,6 +4,9 @@ title: Public Projects
 permalink: /projects/
 ---
 
+* [Zappa](https://github.com/Miserlou/Zappa) (contributor): Serverless Python
+
+* [Python proxy server](https://github.com/ian-whitestone/python-proxy-server): A free, Python proxy server running on AWS lambda 
 
 * [Raspberry pi security system](https://github.com/ian-whitestone/rpi-security-system): Building a home security system with a raspberry pi + Python + Slack. Presented at PyCon Canada in 2017.
 
