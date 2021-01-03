@@ -23,7 +23,7 @@ Today, I'm happy to announce that you **can now use Zappa to manage your serverl
 
 # hello Docker + Zappa!
 
-With the [latest release]() of Zappa, you can now deploy and/or update your Lambda functions with a Docker image. Here's a quick preview of me doing just that:
+With the [latest release]() of Zappa, you can now deploy and update your Lambda functions with a Docker image. Here's a quick preview of me doing just that:
 
 <p align="center">
     <img src="{{ site.baseurl }}{% link images/zappa-serverless-docker/zappa_docker.gif %}">
@@ -33,7 +33,7 @@ With the [latest release]() of Zappa, you can now deploy and/or update your Lamb
 
 1. I call `zappa deploy` and supply a Docker image URI to the `-d / --docker-image-uri` parameter. I'm using a prebuilt Docker image that lives in an AWS [Elastic Container Registry (ECR)](https://aws.amazon.com/ecr/) repository. In a future release of Zappa, we will add in functionality to automatically build the Docker image & push it to ECR so you don't need to worry about these steps.
 2. Zappa creates the new Lambda function with that Docker image, and attaches a new API Gateway endpoint to it.
-3. I make a few web requests to new API endpoint, they invoke the Lambda function and get executed in the Flask app running in my Docker image.
+3. I make a few web requests to new API endpoint, they invoke the Lambda function and get executed in the Flask app running in my Docker container.
 
 For the remainder of the post, we'll dive into the details that make this work.
 
@@ -70,13 +70,13 @@ def run_process():
     print(f"The current time is {now_str}")
 ```
 
-## zappa_settings.json
+## Zappa Configuration
 
-Our `zappa_settings.json` is pretty minimal, and doesn't require any changes from your typical one. The primary difference is you don't need to specify a Python runtime since that will be set in the Docker image.
+Our `zappa_settings.json` is pretty minimal, and **no different from the zappa_settings you're used to**. The only thing worth mentioning is you don't need to specify a Python runtime since that will be set in the Docker image.
 
 With this settings configuration, we get the following:
 
-* Flask app in `zdf/app.py` will be served
+* The Flask app in `zdf/app.py` will be served
 * `process.run_process` function will run every 2 hours
 * The environment variable `EXAMPLE_ENV_VAR` will be available in the Docker image
 
@@ -131,9 +131,9 @@ CMD [ "handler.lambda_handler" ]
 
 The Dockerfile is pretty straightforward. I'm building off a base image provided by AWS, but you can implement yours using a [different base image](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-create-2) if you'd like. I copy my application code into the image and setup my Python environment with [Poetry](https://python-poetry.org/). 
 
-The **only Zappa specific steps** are the last two. The Zappa `handler.py` must be manually added to your Docker image, which I accomplish by grabbing the path with a simple Python command. This handler is then specified in the `CMD` setting, which causes it to run whenever a Docker container using this image is started. These steps are a must, since the `lambda_handler` function contains all the Zappa magic that routes API Gateway requests to the corresponding flask function or lets you execute raw Python commands in your function.
+The **only Zappa specific steps** are the last two. The Zappa `handler.py` must be manually added to your Docker image, which I accomplish by grabbing the path with a simple Python command. This handler is then specified in the `CMD` setting, which causes it to be run whenever a Docker container using this image is started. These steps are a must, since the `lambda_handler` function contains all the Zappa magic that routes API Gateway requests to the corresponding Flask function or lets you execute raw Python commands in your function.
 
-**Note**, if you're pipenv instead of poetry, you can run: `pip install pipenv && pipenv install`. Or if you have a requirements.txt, you can run: `RUN pip install -r requirements.txt`.
+**Note**, if you're [pipenv](https://github.com/pypa/pipenv) instead of poetry, you can run: `pip install pipenv && pipenv install`. Or if you have a requirements.txt, you can run: `RUN pip install -r requirements.txt`.
 
 ### Building the image
 
@@ -148,7 +148,7 @@ The first line is the only other nuance involve with Zappa Docker deployments. T
 
 ### Testing locally
 
-A great thing about Docker based deployments is that you can test out your Lambda function locally. You can launch a new container locally with `docker run -p 9000:8080 lambda-docker-flask:latest` and then test it with some curl commands. Here's the commands you'd rund to invoke each endpoint 
+A great thing about Docker based deployments is that you can test out your Lambda function locally. You can launch a new container locally with `docker run -p 9000:8080 lambda-docker-flask:latest` and then test it with some curl commands. Here's the commands you'd run to invoke each endpoint 
 
 - `curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{"path": "/", "httpMethod": "GET", "requestContext": {}, "body": null}'`
 - `curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{"path": "/time", "httpMethod": "GET", "requestContext": {}, "body": null}'`
@@ -200,7 +200,7 @@ Last but not least, we can deploy our new function in one line:
 
 `zappa deploy lambda_docker_flask -d XXXXX.dkr.ecr.us-east-1.amazonaws.com/lambda-docker-flask:latest`
 
-## Updating your function
+## Updating with Zappa
 
 If you later make changes to your application code, you can repeat the process above and then update your function with `zappa update`:
 
@@ -212,7 +212,7 @@ docker push XXXXX.dkr.ecr.us-east-1.amazonaws.com/lambda-docker-flask:latest
 zappa update lambda_docker_flask -d XXXXX.dkr.ecr.us-east-1.amazonaws.com/lambda-docker-flask:latest
 ```
 
-And that's it. If you have any questions, you can join the [Zappa slack workspace](https://zappateam.slack.com/) or comment below.
+And that's it. If you have any questions, you can join the [Zappa slack workspace](https://zappateam.slack.com/) or comment below. Thanks for reading!
 
 <hr>
 
