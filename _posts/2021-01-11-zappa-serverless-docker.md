@@ -17,7 +17,7 @@ I've been using [Zappa](https://github.com/Miserlou/Zappa) to manage my serverle
 
 But even with all its magic, there are still some major pains for many Python deployments. Your Lambda zip package can only be a [few hundred megabytes](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html), which is easily exceeded as soon as you have any larger dependencies like pandas, numpy, or sklearn. Zappa provides a smart [workaround](https://github.com/Miserlou/Zappa#large-projects) for this by saving your large dependencies in S3 and downloading them at runtime, but this kills response times when your function is [cold starting](https://www.serverless.com/blog/keep-your-lambdas-warm). On top of the size limits, you also need to make sure you are using Python package versions that were compiled for Amazon Linux for any packages with C dependencies. These two nuances quickly add more complexity & headaches to your serverless deployments. 
 
-Last month, [AWS announced new functionality](https://aws.amazon.com/blogs/aws/new-for-aws-lambda-container-image-support/) that lets you deploy Lambda functions as **container images** up to 10GB in size. What does that mean? Instead of pre-compiling all your packages on Amazon Linux, putting them & your application code in a zip file and hoping you are under the limit, you can now just create a Docker image and deploy your function with that. 
+In December 2020, [AWS announced new functionality](https://aws.amazon.com/blogs/aws/new-for-aws-lambda-container-image-support/) that lets you deploy Lambda functions as **container images** up to 10GB in size. What does that mean? Instead of pre-compiling all your packages on Amazon Linux, putting them & your application code in a zip file and hoping you are under the limit, you can now just create a Docker image and deploy your function with that. 
 
 Today, I'm happy to announce that you **can now use Zappa to manage your serverless deployments with Docker ✨🍰✨** .
 
@@ -144,7 +144,7 @@ zappa save-python-settings-file lambda_docker_flask
 docker build -t lambda-docker-flask:latest .
 ```
 
-The first line is the only other nuance involve with Zappa Docker deployments. The Zappa handler relies on a Python settings file which gets automatically generated in the traditional zip-based deployments. The `zappa save-python-settings-file` command generates this exact same file and saves it to `zappa_settings.py` in your working directory. When you then run your `docker build` command, this file will get copied in along with the rest of your application code. 
+The first line is the only other nuance involved with Zappa Docker deployments. The Zappa handler relies on a Python settings file which gets automatically generated in the traditional zip-based deployments. The `zappa save-python-settings-file` command generates this exact same file and saves it to `zappa_settings.py` in your working directory. When you then run your `docker build` command, this file will get copied in along with the rest of your application code. 
 
 ### Testing locally
 
