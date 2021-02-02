@@ -1,0 +1,6 @@
+.ipynb_checkpoints
+dask-worker-space
+*.ipynb
+!playground.ipynb
+!simulations.ipynb
+!conversion_sessions_per_user.ipynb
