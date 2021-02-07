@@ -112,6 +112,8 @@ If you think your sessions may not be independent and there could be some carryo
 
 The extent to which this affects you will ultimately depend on the domain. You'll have to use your judgement to decide how significant you think this carryover could be. The degree of impact will also depend on the distribution of sessions in your user base. If most users visit close to once, on average, then this will be much less of an issue.
 
+Since user level randomization will generally involve using cookies to identify users, it is worth noting that this approach will not completely guarantee independence among your units. Cookies are an imperfect representation of humans, as a single person can appear under multiple "user cookies" if they ever switch browsers, devices, or clear their cookies. This shouldn't dissuade you from user level randomization — it is still our best way to control for non-independence and give users a consistent experience, but rather make you aware that the approach does not provide a silver bullet to our problems. We live in an imperfect world.
+
 # Notes
 
 <sup>1</sup>This is a violation of what is known as the [stable unit treatment value assumption](https://blogs.iq.harvard.edu/violations_of_s#:~:text=Methods%20for%20causal%20inference%2C%20in,treatments%20of%20others%20around%20him.), or SUTVA. SUTVA is the assumption that a unit's outcome does not depend on the treatment assignment of another unit (i.e. session) in the population. 
