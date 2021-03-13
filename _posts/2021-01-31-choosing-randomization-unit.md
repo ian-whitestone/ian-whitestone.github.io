@@ -122,17 +122,7 @@ Since user level randomization will generally involve using cookies to identify 
 
 ### ⚠️ But is it okay to use session level metrics with user level randomization?
 
-In the simulation above I made a simplifying assumption that session conversion rate and sessions per user were independent. A user with 5 sessions has the same session conversion rate as someone with just one. This doesn't make a lot of sense, especially when you think back to the Terry & Jerry shopping experiences from above. Terry needed more time (3 sessions to be exact) before making their purchase, while Jerry was quick to pull the trigger. When you look at real data, it's not uncommon to see something like this:
-
-<p align="center">
-    <img width="50%" src="{{ site.baseurl }}{% link images/choosing-randomization-unit/spu_conversion_curve.png %}">
-</p>
-
-Users who have more sessions likely have a lower baseline session conversion rate. This can lead to some interesting side effects. As discussed in [this post](https://towardsdatascience.com/the-second-ghost-of-experimentation-the-fallacy-of-session-based-metrics-fb65006d30ff), it's possible to see an increased rate of false positives when using session level metrics with user level randomization (which is what we were doing above ☝️). This can happen due to increased variance in session conversion rate depending on which users fall into each group in your experiment. 
-
-Similar to the impact of our carryover effect, the extent to which this impacts you will highly depend on your user base and the underlying characteristics. The distribution of sessions per user and the variability between users and their session conversion rates will determine whether this impacts you and by how much.
-
-I don't currently have any good guidance for this, and will be exploring this potential cause for false positives in another post. For now, I'll leave you with some advice: if you're planning to run a user level experiment but want to use session level metrics due to their simplicity, run an A/A test. You can use your actual data and simulate user level randomization with session level metrics, and see if you get an increased rate of false positives.
+As discussed in many articles about online experiments (see [here](https://www.exp-platform.com/Documents/IEEE2010ExP.pdf) or [here](https://towardsdatascience.com/the-second-ghost-of-experimentation-the-fallacy-of-session-based-metrics-fb65006d30ff)), it's possible to see an increased rate of false positives when using session level metrics with user level randomization, which is what we were doing above ☝️. This can happen due to increased variance in session conversion rates depending on which users fall into each group in your experiment. When should you worry about this? I explore this topic more in a [follow up post]({% post_url 2021-03-12-randomization-unit-analysis-unit %}). The short answer is it depends on your data, and you should always run an offline A/A test to determine if you'd see an increased rate of false positives when your randomization unit <> analysis unit. If you are seeing higher than expected false positives, you'll need to update your statistical test method accordingly or switch to a different analysis metric such that your randomization unit = analysis unit.
 
 # Appendix
 
@@ -198,6 +188,8 @@ for user_id, num_sessions in enumerate(sessions_per_user):
 # store in a dataframe for easier analysis downstream
 df = pd.DataFrame(data)
 ```
+
+### Bayesian A/B test of two proportions
 
 Now that we have our sessions data, we can perform our statistical comparisons of the two groups. I'm using some Bayesian methods since I find them much more intuitive, but you could achieve a similar output with a Frequentist approach. If you're unfamiliar with Bayesian methods, I highly recommend Cam Davidson-Pilon's book [Bayesian Methods for Hackers](https://github.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers) for a quick intro, and [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) by Richard McElreath for deeper study of the subject.
 
