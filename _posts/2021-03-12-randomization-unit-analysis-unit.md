@@ -18,7 +18,7 @@ However, when changing the randomization unit from session to user while keeping
 
 To understand why issues can arise when your randomization unit <> your analysis unit, let's quickly recap the workings of the statistical tests we use to compare our analysis metric between treatment & control.
 
-Continuing with the theme from the previous post, we'll use session conversion rate as our metric of interest. We're trying to understand if our new feature, the "treatment", actually caused a change conversion rates, or if that difference we observed could have been due to chance. To answer this question, we figure out how likely it is to observe the difference in conversion rate we saw in the experiment if there truly was no difference. Under this null hypothesis, where there is **no difference**, we have a standard normal distribution with an expected difference (mean) of 0. When comparing two proportions, the **z-test** is commonly applied to test the null hypothesis that the treatment group and control group are the same.
+Continuing with the theme from the previous post, we'll use session conversion rate as our metric of interest. We're trying to understand if our new feature, the "treatment", actually caused a change conversion rates, or if that difference we observed could have been due to chance. To answer this question, we figure out how likely it is to observe the difference in conversion rates we saw in the experiment if there truly was no difference. Under this null hypothesis, where there is **no difference**, we have a standard normal distribution with an expected difference (mean) of 0. When comparing two proportions, the **z-test** is commonly applied to test the null hypothesis that the treatment group and control group are the same.
 
 <p align="center">
     <img width="70%" src="{{ site.baseurl }}{% link images/randomization-unit-analysis-unit/null_hypothesis_distribution.png %}">
@@ -170,7 +170,7 @@ Applying these two methods to the changing sessions per user distribution, we ca
 
 #### Varying the conversion rate with sessions per user
 
-We can again see the superior performance of hte bootstrap & delta method p-values while varying the change in conversion rate as a function of sessions per user, as evident by their uniform distributions under all scenarios.
+We can again see the superior performance of the bootstrap & delta method p-values while varying the change in conversion rate as a function of sessions per user, as evident by their uniform distributions under all scenarios.
 
 <p align="center">
     <img width="100%" src="{{ site.baseurl }}{% link images/randomization-unit-analysis-unit/p_values_cvr_decay_factor_all.gif %}">
@@ -178,13 +178,13 @@ We can again see the superior performance of hte bootstrap & delta method p-valu
 
 ## User grain metrics
 
-As an alternative to changing your statistical test, you can instead change your analysis metric so that it is at the same grain as your randomization unit. With the example from this post, this would involve looking at user conversion rate instead of session conversion rate. User conversion rate would be defined as the proportion of users who converted **at least once**. You may choose to look at conversions per user instead, if you believe your treatment may change how often users convert. Note that this would involve a different statistical test, such as the t-test, as we would no longer be dealing with comparing two binomial proportions.
+As an alternative to changing your statistical test, you can instead change your analysis metric so that it is at the same grain as your randomization unit. With the example from this post, this would involve looking at user conversion rate instead of session conversion rate. User conversion rate would be defined as the proportion of users who converted **at least once**. You may choose to look at conversions per user instead, if you believe your treatment may not only change whether users convert, but how often they do. Note that this would involve a different statistical test, such as the t-test, as we would no longer be comparing two binomial proportions.
 
 While switching to user grain metrics may appear to be the easiest solution, it does come with some challenges.
 
 1. User grain metrics may not be readily available as they can be more computationally expensive to compute. Calculating the true user conversion rate would involve processing **all sessions** for each user and then seeing how many convert. Depending on your sessions data volumes, this could be infeasible. You may have to instead calculate the number of conversions from a smaller time period (i.e. a "14 day user conversion rate")
 2. With session grain metrics, you will typically segment them by things like device type, the referrer, what page the session started on, etc. When switching to user grain metrics, this becomes a bit trickier as you have to pick a single value for each user before performing segmentation. A simple approach could involve taking the device, referrer and landing page from the first session as the user's values.
-3. Stakeholders may be less familiar with user grain metrics, as session grain metrics are typically more commonly used. This may require some additional explanation on your end, or calculations in order to produce comparables numbers (i.e. the equivalent increase in the session conversion metrics).
+3. Stakeholders may be less familiar with user grain metrics, as session grain metrics are more commonly used. This may require some additional explanation on your end, or calculations in order to produce comparable numbers (i.e. the equivalent increase in the session conversion metrics).
 
 # Wrapping up
 
