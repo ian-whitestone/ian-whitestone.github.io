@@ -4,7 +4,7 @@ title: randomization unit < > analysis unit
 author: ianwhitestone
 summary: When & how to deal with experiments where your randomization unit is different than your analysis unit
 comments: false
-image: images/randomization-unit-analysis-unit/spu_conversion_curve.png
+image: images/randomization-unit-analysis-unit/cover_photo.png
 ---
 
 {% include head.html %}
