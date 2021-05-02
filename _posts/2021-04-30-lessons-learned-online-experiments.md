@@ -3,7 +3,7 @@ layout: post
 title: Lessons learned from online experiments
 author: ianwhitestone
 summary: 10 hard earned lessons from running online experiments 
-image: images/essons-learned-online-experiments/peeking.png
+image: images/lessons-learned-online-experiments/peeking.png
 comments: false
 ---
 

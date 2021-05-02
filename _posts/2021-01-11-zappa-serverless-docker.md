@@ -1,9 +1,9 @@
 ---
 layout: post
-title: (DRAFT) Serverless Docker on AWS Lambda with Zappa
+title: Serverless Docker on AWS Lambda with Zappa
 author: ianwhitestone
 summary: Announcing Zappa's new container image support
-comments: true
+comments: false
 image: images/zappa-serverless-docker/main.png
 ---
 
