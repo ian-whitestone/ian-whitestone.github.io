@@ -12,7 +12,7 @@ comments: true
 SQL isn't easy to test. Unlike most programming languages, there's no testing framework you can use out of the box. To get around this, users will typically test their SQL queries against production data and spot check the results, or rely on experienced coworkers to review the code. You can get by with this approach in some cases, but as SQL queries evolve over time or grow in complexity, the possibility for uncaught errors rises significantly.
 
 
-In this post, I'll demonstrate one method for testing SQL through the use of mock data. This approach has served me well for doing one-off validation of more complex queries, and in continuous integration tests for any production deployments that rely on SQL to perform  nontrivial logic.
+In this post, I'll demonstrate one method for testing SQL through the use of mock data. This approach has served me well for doing one-off validation of more complex queries, and in continuous integration tests for any production deployments that rely on SQL to perform nontrivial logic.
 
 
 # Mocking Data
@@ -76,7 +76,7 @@ sample_data AS (
         -- missing the buyer country code
         (6, ARRAY['US', 'FR'], False, Null, Null, Null),
         -- no fulfillment countries that required shipping
-        (7, ARRAY[], False, 'FR', True, False),
+        (7, ARRAY[], Null, 'FR', True, False),
         -- missing fulfillment data for the order
         (8, Null, Null, 'FR', True, Null)
     ) AS t (

@@ -41,6 +41,11 @@ FROM
     results
 """
 
+# I opted to store the test data in strings as this was the quickest
+# approach to get a working proof of concept. Storage in other
+# formats like dictionaries or CSVs may be easier for users to
+# create and manipulate, but would require some more functionality
+# to ingest & convert to the corresponding SQL code & data types
 TEST_DATA = {
     'users': {
         "column_names": ['id', 'country'],
