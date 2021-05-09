@@ -2,7 +2,7 @@
 layout: post
 title: Good Data Scientist, Bad Data Scientist
 author: ianwhitestone
-summary: What separates a good Data Scientist from a bad one
+summary: What separates a good Data Scientist from a bad one?
 comments: False
 ---
 
@@ -51,4 +51,3 @@ Good DS has a deep understanding of the product or service their company offers.
 Good DS gets their hands dirty. They actively use their product or service. They test the product to identify pain points, or understand how the underlying data models work. They listen, or even talk to customers. Bad DS doesn't see the value in this or thinks it's someone else's job.
 
 Good DS actively proposes work. They think beyond what a stakeholder may ask and generate new ideas for how data can add value. They push instead of pull. Bad DS operates purely as a question & answer service.
-
