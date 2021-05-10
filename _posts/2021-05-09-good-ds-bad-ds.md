@@ -20,7 +20,7 @@ There's also a core set of technical chops every DS must have: SQL, an analytica
 
 # Good DS / Bad DS
 
-Good DS is obsessed with solving business problems. Bad DS is obsessed with applying a specific technology or tool.
+Good DS is obsessed with solving business problems. They relentlessly search for them, and then bring out the right tool once found. Bad DS is obsessed with applying a specific technology or tool. They'll orient their search for problems around the tool they are looking to use.
 
 Good DS has a deep understanding of data lineage & sourcing, and will often build these pipelines themselves. Bad DS thinks it is someone else's job.
 
@@ -30,19 +30,21 @@ Good DS thinks from first principles. Bad DS accepts everything they have heard 
 
 Good DS adjusts their messaging based on their audience. They understand when to provide context and how deep they should go. Bad DS delivers the same message regardless.
 
-Good DS understands marginal return on effort. They know when adding a 1% lift in accuracy will have a high enough ROI to justify spending weeks trying to achieve it. Or whether making a statistic 1% more accurate will actually change any decisions. Bad DS keeps working until they run out of time or someone tells them to stop. 
+Good DS is curious. They venture well outside the confines of their domain in order to seek broader context and understanding. Bad DS tries to abstract everything against the domain or data they are already familiar with, and in doing so often miss the bigger picture.
 
-Good DS relentlessly searches for problems and then brings out the right tool for the problem. Bad DS has a tool and is looking for problems.
+Good DS understands marginal return on effort. They know when adding a 1% lift in accuracy will have a high enough ROI to justify spending weeks trying to achieve it. Or whether making a statistic 1% more accurate will actually change any decisions. Bad DS keeps working until they run out of time or someone tells them to stop. 
 
 Good DS starts simple, ships, and then iterates. Bad DS starts with the most advanced technique they know.
 
 Good DS is constantly learning & evolving their toolbox. Bad DS stagnates and sticks with what they know.
 
+Good DS is an effective bridge between different disciplines, connecting business and tech organizations cohesively and thus becoming central nodes in the information exchange. Bad DS are a side node in the team or organization, easily ignorable.
+
 Good DS knows where to find information, and doesn't stop when their first attempt fails. Bad DS gets blocked as soon as they can't find what they're looking for.
 
 Good DS is a generalist. They can draw from different skills & tools based on the problem at hand. Bad DS has a narrow set of skills and tools they can apply.
 
-Good DS generates lots of different hypotheses and tests them. Bad DS only thinks of a few and stops when they turn out to be wrong.
+Good DS generates lots of different hypotheses and tests them. They ask a bunch of questions. Bad DS only thinks of a few and stops when they turn out to be wrong.
 
 Good DS understands the basics of web technology and their company's underlying tech stack. Bad DS treats this as a black box that is outside of their domain and therefore shouldn't be learned.
 
@@ -51,3 +53,9 @@ Good DS has a deep understanding of the product or service their company offers.
 Good DS gets their hands dirty. They actively use their product or service. They test the product to identify pain points, or understand how the underlying data models work. They listen, or even talk to customers. Bad DS doesn't see the value in this or thinks it's someone else's job.
 
 Good DS actively proposes work. They think beyond what a stakeholder may ask and generate new ideas for how data can add value. They push instead of pull. Bad DS operates purely as a question & answer service.
+
+<br>
+<br>
+<hr>
+
+Thanks to [@javier](https://twitter.com/infrahumano) for providing valuable feedback & suggestions.
