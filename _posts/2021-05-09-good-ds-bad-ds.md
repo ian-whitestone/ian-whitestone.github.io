@@ -44,7 +44,7 @@ Good DS knows where to find information, and doesn't stop when their first attem
 
 Good DS is a generalist. They can draw from different skills & tools based on the problem at hand. Bad DS has a narrow set of skills and tools they can apply.
 
-Good DS generates lots of different hypotheses and tests them. They ask lots of questions. Bad DS only thinks of a few and stops when they turn out to be wrong.
+Good DS generates lots of different hypotheses and tests them. They ask a bunch of questions. Bad DS only thinks of a few and stops when they turn out to be wrong.
 
 Good DS understands the basics of web technology and their company's underlying tech stack. Bad DS treats this as a black box that is outside of their domain and therefore shouldn't be learned.
 
