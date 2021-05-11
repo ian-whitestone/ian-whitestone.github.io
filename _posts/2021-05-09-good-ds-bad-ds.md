@@ -12,11 +12,11 @@ comments: False
 
 <hr>
 
-At their core, data scientists exist to create business value with data. The ways in which value is generated will vary largely company to company, and even team to team. For products or business teams that are early in their lifecycle, this will often take the form of building up basic analytical foundations. The team is likely blind to aspects of the product performance, user behaviour or total addressable market. It is your job to guide them. For others, your product may be more mature and well understood, with established data foundations. Opportunities to enrich the product experience with data driven features may arise. It is up to you to understand how you can drive the most value.
+At their core, data scientists exist to create business value with data. The ways in which value is generated will vary largely company to company, and even team to team. For teams that are early in their lifecycle, this will often take the form of building up basic analytical foundations. The team is likely blind to aspects of the product performance, user behaviour or total addressable market. Or maybe they need help identifying and sizing new opportunities. It is your job to guide them. For others, the product may be more mature and well understood, with established data foundations. Opportunities to enrich the product experience with data driven features or optimize through experimentation may arise. It is up to you to understand how you can drive the most value.
 
-There's a wide array of work a data scientist (DS) can be involved with. This post aims to address the common elements that will make a great DS, or a bad one, no matter what part of the stack you are working on. 
+There's a wide array of work a data scientist (DS) can be involved with. This post aims to address the common elements that will make a great DS, or a bad one, no matter what part of the stack you are working on.
 
-There's also a core set of technical chops every DS must have: SQL, an analytical mindset, fluency in a programming language like Python or R, an understanding of statistics, and machine learning methods, if the product calls for it. But that is only half the story. If we condition on people who have those required baseline skills, this post is what separates the good from the bad. 
+There's also a core set of technical chops every DS must have: SQL, an analytical mindset, fluency in a programming language like Python or R, an understanding of statistics & common statistical procedures, and machine learning methods, if the product calls for it. But that is only half the story. If we condition on people who have those required baseline skills, this post is what separates the good from the bad.
 
 # Good DS / Bad DS
 
@@ -46,6 +46,8 @@ Good DS is a generalist. They can draw from different skills & tools based on th
 
 Good DS generates lots of different hypotheses and tests them. They ask a bunch of questions. Bad DS only thinks of a few and stops when they turn out to be wrong.
 
+Good DS presents insights and derives business recommendations from them. Bad DS presents numbers.
+
 Good DS understands the basics of web technology and their company's underlying tech stack. Bad DS treats this as a black box that is outside of their domain and therefore shouldn't be learned.
 
 Good DS has a deep understanding of the product or service their company offers. They understand the company business model and how their team or group contributes to the P&L. Bad DS doesn't think this is necessary.
@@ -54,8 +56,6 @@ Good DS gets their hands dirty. They actively use their product or service. They
 
 Good DS actively proposes work. They think beyond what a stakeholder may ask and generate new ideas for how data can add value. They push instead of pull. Bad DS operates purely as a question & answer service.
 
-<br>
-<br>
 <hr>
 
-Thanks to [@javier](https://twitter.com/infrahumano) for providing valuable feedback & suggestions.
+Thanks to [@javier](https://twitter.com/infrahumano) & [@rohit](https://twitter.com/amishrarohit) for providing valuable feedback & suggestions.
