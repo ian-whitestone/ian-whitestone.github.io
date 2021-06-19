@@ -120,7 +120,7 @@ Despite the major head scratching this caused, I walked away with some really im
 * **💡Log generously**. Our data platform team made it incredibly simple and low effort to add new Kafka instrumentation, so we took advantage. The new request logging we initially added for investigative purposes ended up being used in the final metrics.
 * **💡Run more A/A tests**. By running the A/A test, I was able to identify the sample ratio mismatch issues and update our metrics and data sources prior to running the final experiment. We also learned the impact of redirection alone that helped with the final results interpretation in the eventual A/B test where we had redirection to a different URL.<sup>5</sup>
 
-# Peeking 👀
+# Peeking
 
 In one experiment where we were testing the impact of translating content into a buyer's preferred language, I was constantly peeking at the results each day as I was particularly interested in the outcome. The difference in the success metric between the treatment and control groups had been holding steady for well over a week, until it took a nose dive in the last few days of the experiment.
 
