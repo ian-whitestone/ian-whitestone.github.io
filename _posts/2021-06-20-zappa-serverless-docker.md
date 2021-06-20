@@ -23,7 +23,7 @@ Today, I'm happy to announce that you **can now use Zappa to manage your serverl
 
 # hello Docker + Zappa!
 
-With the [latest release]() of Zappa, you can now deploy and update your Lambda functions with a Docker image. Here's a quick preview of me doing just that:
+With the [latest release](https://github.com/zappa/Zappa/releases/tag/0.53.0) of Zappa, you can now deploy and update your Lambda functions with a Docker image. Here's a quick preview of me doing just that:
 
 <p align="center">
     <img src="{{ site.baseurl }}{% link images/zappa-serverless-docker/zappa_docker.gif %}">
@@ -221,4 +221,4 @@ And that's it. If you have any questions, you can join the [Zappa slack workspac
 * The [Github repository](https://github.com/ian-whitestone/zappa-serverless-docker) containing the code examples I used in the demo
 * [AWS announcement](https://aws.amazon.com/blogs/aws/new-for-aws-lambda-container-image-support/) of Lambda + Docker support
 * [AWS guidelines](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html) for building Docker images that will work with Lambda
-* [Primary PR in Zappa](https://github.com/Miserlou/Zappa/pull/2192) to enable functionality outlined in this post
+* [Primary PR in Zappa](https://github.com/zappa/Zappa/pull/967) to enable functionality outlined in this post
