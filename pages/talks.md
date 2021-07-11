@@ -4,6 +4,8 @@ title: Talks
 permalink: /talks/
 ---
 
+*   [Data Science @ Shopify](https://ianwhitestone.work/slides-v2/data-science-at-shopify.html)
+    * Presented to the students of the [Vector Institute](https://vectorinstitute.ai/) - May 6, 2021
 *   [Bootstrapping a data-driven application with Zappa](https://ianwhitestone.work/slides/serverless-meetup-feb-2020.html)
     *   [Serverless Toronto](https://www.meetup.com/Serverless-Toronto/events/267827023/) - February 27, 2020
 *   [Gimme Shelter: Using Python to Find an Apartment in Toronto](https://ianwhitestone.work/slides/pycon-canada-2019.html)
