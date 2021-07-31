@@ -17,10 +17,10 @@ image: images/serverless-ml-deployments/cover-v2.png
 
 The benefits of serverless offerings from cloud providers are well known at this point. They eliminate the hassle of provisioning & managing servers, automatically take care of scaling in response to varying workloads, and can be much cheaper for lower volume services since they don't run 24/7. Despite these benefits, serverless options like AWS Lambda have rarely been used for serving machine learning (ML) models due to a few major drawbacks:
 
-1. **Deployment package management**. For any libraries with C dependencies (numpy, scipy, pandas, sklearn, tensorflow, etc..), you must make sure your Lambda deployment package is using versions of these libraries that were compiled on Amazon Linux. Since most ML libraries will have some C dependencies, this hurdle will almost always be present. Getting around this usually means having a separate docker image or EC2 instance whose job is solely to generate your deployment package with the correctly compiled libraries.
-2. **Deployment package size limits**. Even with the right Python package versions in place, your total deployment package size had to be less than 250MB. For large libraries like tensorflow/pandas/numpy/scipy, this limit is easily exceeded. In order to get around this limit, users could split up their deployment packages into multiple [layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html), and individually deploy each of those<sup>1</sup>. For users of the [Zappa](https://github.com/zappa/Zappa) framework, they could take advantage of the [`slim_handler` feature](https://github.com/zappa/Zappa#large-projects), which loads the dependencies from S3 when the Lambda function is instantiated.
-3. **RAM limits**: On top of this, the Lambda function itself could not use more than 3GB of RAM historically. This can become an issue for serving larger ML models that require more RAM.
-4. **Cold starts**. If a serverless function has not been executed for a ~15 minutes<sup>2</sup>, the next request will experience what is known as a [cold start](https://www.serverless.com/blog/keep-your-lambdas-warm) since the function's container must be provisioned. Cold starts will occur when Lambda is autoscaling in response to higher request volumes. Cold starts can take >5 seconds, and extend even longer if you have expensive imports or instatiations. When using Lambda to serve an ML model, you'll typically instatiate your model object once during the cold start, so it can be re-used on all subsequent "warm" requests. This can easily add another few seconds to the cold start time as you load the model from disk or a storage service like S3.
+1. **Deployment package management**. For any libraries with C dependencies (numpy, scipy, pandas, sklearn, tensorflow, etc..), you must make sure your [Lambda deployment package](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html) is using versions of these libraries that were compiled on Amazon Linux. Since most ML libraries will have some C dependencies, this hurdle will almost always be present. Getting around this usually means having a separate docker image or EC2 instance whose job is solely to generate your deployment package with the correctly compiled libraries.
+2. **Deployment package size limits**. Even with the right Python library versions in place, your total deployment package size has to be less than 250MB. For large libraries like tensorflow/pandas/numpy/scipy, this limit is easily exceeded. In order to get around this limit, users could split up their deployment packages into multiple [layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html), and individually deploy each of those<sup>1</sup>. For users of the [Zappa](https://github.com/zappa/Zappa) framework, they could take advantage of the [`slim_handler` feature](https://github.com/zappa/Zappa#large-projects), which loads the dependencies from S3 when the Lambda function is instantiated. Neither of these options are great.
+3. **RAM limits**: Historically, the Lambda function itself could not use more than 3GB of RAM. This became an issue for serving larger ML models that require more RAM.
+4. **Cold starts**. If a serverless function has not been executed for ~15 minutes<sup>2</sup>, the next request will experience what is known as a [cold start](https://www.serverless.com/blog/keep-your-lambdas-warm) since the function's container must be provisioned. Cold starts will also occur when Lambda is autoscaling in response to higher request volumes, as more functions are spun up and must be instantiated. Cold starts can take >5 seconds, and extend even longer if you have expensive imports or initializations. When using Lambda to serve an ML model, you'll typically instantiate your model object once during the cold start, so it can be re-used on all subsequent "warm" requests. This can easily add another few seconds to the cold start time as you load the model from disk or a storage service like S3.
 
 Sounds like a mess worth avoiding...
 
@@ -70,7 +70,7 @@ with open('model.pkl', "wb") as f_out:
     pickle.dump(clf, f_out)
 ```
 
-By fiddling with the `n_estimators` and `max_depth` hyperparameters, I created two different models that were 140MB and 420MB on disk.
+By fiddling with the `n_estimators` and `max_depth` hyperparameters, I created three different models that were 140MB, 420MB and 1090MB on disk.
 
 ### Model deployment
 
@@ -194,19 +194,19 @@ This can then be easily consumed and parsed in Python to get the distribution of
 A typical run of the locust load test I described above would have a profile like the one in the graph below. In the first 15 seconds the 100 users all spawn and start making requests. In response to the increased demand, AWS Lambda immediately starts provisioning new Lambda instances. During the load tests I ran, it would spin up 100 functions that could then concurrently process requests. During these first 15 seconds, you can see the p95 and max response times taking between 6-11 seconds. For the duration of the test, the response time distribution narrows as the p95 and max response times become closer to the median, since all the Lambda functions are warmed up.
 
 <p align="center">
-    <img width="70%" src="{{ site.baseurl }}{% link images/serverless-ml-deployments/performance_over_time.png %}">
+    <img width="100%" src="{{ site.baseurl }}{% link images/serverless-ml-deployments/performance_over_time.png %}">
 </p>
 
 This particular performance run was for the Docker image that loaded a 140MB model from disk. You can see the cold starts (defined as any response time > 1000ms) were just under 6 seconds on average.
 
 <p align="center">
-    <img width="60%" src="{{ site.baseurl }}{% link images/serverless-ml-deployments/cold_requests.png %}">
+    <img width="100%" src="{{ site.baseurl }}{% link images/serverless-ml-deployments/cold_requests.png %}">
 </p>
 
 Once the Lambda functions were warmed up, average response times were under 90ms!
 
 <p align="center">
-    <img width="60%" src="{{ site.baseurl }}{% link images/serverless-ml-deployments/warm_requests.png %}">
+    <img width="100%" src="{{ site.baseurl }}{% link images/serverless-ml-deployments/warm_requests.png %}">
 </p>
 
 #### ⚠️ Super cold starts™ for Docker deployments
@@ -214,21 +214,21 @@ Once the Lambda functions were warmed up, average response times were under 90ms
 When load testing a newly deployed Lambda function, the cold starts will be considerably longer than what I showed above. Here's a profile from one of the load tests for the setup where the 140MB model was loaded from disk. As you can see, there's a bimodal distribution where a bunch of cold starts are in the 5-7 second range and the other set are >25 seconds!
 
 <p align="center">
-    <img width="80%" src="{{ site.baseurl }}{% link images/serverless-ml-deployments/super_cold_start.png %}">
+    <img width="100%" src="{{ site.baseurl }}{% link images/serverless-ml-deployments/super_cold_start.png %}">
 </p>
 
 After a quick Google, I found this [comment](https://www.reddit.com/r/aws/comments/kqhri9/lambda_container_images_long_cold_starts/gi4w6b6/?utm_source=reddit&utm_medium=web2x&context=3):
 
 > From my reading AWS has a huge docker cache on each server to help speed things up. They also can run a container without loading the entire container.
 
-My guess is that these "super cold starts" occur when the cached Docker image is not available, and must be downloaded. After waiting ~15 minutes and running another load test on the same Lambda function, I would no longer see these super cold starts, which seems to support this hypothesis. It's worth noting that for whatever reason, the other setup I tested where the model was loaded from S3 instead of being baked into the Docker image had shorter super cold starts.
+My guess is that these "super cold starts" occur when the cached Docker image is not available, and must be downloaded. After waiting ~15 minutes and running another load test on the same Lambda function, I would no longer see these super cold starts, which seems to support this hypothesis. It's worth noting that for whatever reason, the other setup I tested where the model was loaded from S3 instead of being baked into the Docker image had significantly shorter super cold starts, despite the docker image only being ~25% smaller.
 
 #### Cold starts performance summary
 
 Here's a summary of the cold start performance from all the load tests I ran for each model setup. Cold starts were identified as any response taking longer than 1000ms. Both setups perform the same once the Lambda's are warm, so it's not worth comparing those response times. As a reminder:
 
-* The `DOCKER_DISK` setup has the pickled model file baked into the image, and is loaded from disk upon Lambda instatiation
-* The `DOCKER_S3` setup instead loads the model from S3 upon Lambda instatiation, resulting in a Docker image that is smaller by `<model_size>MB`
+* The `DOCKER_DISK` setup has the pickled model file baked into the image, and is loaded from disk upon Lambda instantiation
+* The `DOCKER_S3` setup instead loads the model from S3 upon Lambda instantiation, resulting in a Docker image that is smaller by `<model_size>MB`
 
 All values shown are in milliseconds.
 
@@ -244,18 +244,20 @@ All values shown are in milliseconds.
 Some main observations:
 
 * Looking at the p50 cold start times, the `DOCKER_DISK` setup **performs better** than the `DOCKER_S3` setup. The performance gains become larger as the model size increases. This makes sense since it's faster to load from disk than over the network.
-* Looking at the p99 cold start times, the `DOCKER_DISK` setup **performs worse** than the `DOCKER_S3` setup
+* Looking at the p99 & max cold start times, the `DOCKER_DISK` setup **performs worse** than the `DOCKER_S3` setup
     * These will be the "super cold starts" I was discussing above
     * API gateway has a max timeout limit of 30 seconds, so the stats here are actually misleading, since it's not measuring the time it would have taken for the Lambda function to cold start and then serve the request. For the `DOCKER_DISK` setup with the 1090MB model size, I manually inspected the logs and saw instancing times taking ~100 seconds!
 * Cold start times for larger model deployments are **really long**, a p50 of almost 10 seconds for a 420MB model and almost 20 seconds for a 1GB model.
 
 ## Closing remarks
 
-The container image support release has made AWS Lambda a much more attractive option for serving ML models. Deploying and updating a serverless ML endpoint is much simpler and less risky process as a result. However, container image support did not solve the cold start problem. In fact, it appears to have made it worse. Even though cold starts will only affect a very small fraction of users, the experience for those users will be abysmal. If you are considering using a Docker based Lambda function for any web service, you should consider using their provisioned concurrency<sup>5</sup> functionality in order to prevent these long cold starts.
+The container image support release has made AWS Lambda a much more attractive option for serving ML models. Deploying and updating a serverless ML endpoint is much simpler and a less risky process as a result. However, container image support did not solve the cold start problem. In fact, it appears to have made it worse. Even though cold starts will only affect a very small fraction of users, the experience for those users will be abysmal: waiting between 5 and 30 seconds for a response. If you are using a Docker based Lambda function for any web service, you should consider using their provisioned concurrency<sup>5</sup> functionality in order to prevent these long cold starts.
 
 ## Notes
 
 All the supporting code for this post can be found in [this repo](https://github.com/ian-whitestone/serverless-ml-cold-starts). 
+
+<hr>
 
 [1] I've never used used [layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) in my Lambda deployments, but the idea does not sound great to me. Tensorflow for example is over 400MB ([ref](https://www.google.com/search?q=tensorflow+size+of+package)), so would have to go into its own layer with nothing else.
 
@@ -268,4 +270,4 @@ All the supporting code for this post can be found in [this repo](https://github
     <img width="100%" src="{{ site.baseurl }}{% link images/serverless-ml-deployments/log_parsing.png %}">
 </p>
 
-[5] Using provisioned concurrency will significantly increase costs. Ideally, AWS would only start directing requests to the new instances once they are warm when autoscaling, which would reduce the need for this...
+[5] Using provisioned concurrency will significantly increase costs. Ideally, AWS would only start directing requests to the new instances once they are warm when autoscaling, which would reduce the need for this...An untested workaround you could try as a cheaper alternate: schedule a separate lambda function that runs every 10 minutes and fires off X simulataneous requests (use locust!). This should cause X new lambda functions to spin up, and in theory they'd stay warm for the next 15 minutes. X would be the desired number of Lambda functions available to serve requests.
