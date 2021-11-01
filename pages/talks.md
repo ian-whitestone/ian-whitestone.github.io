@@ -4,6 +4,8 @@ title: Talks
 permalink: /talks/
 ---
 
+*   [In the trenches with Spark](https://ianwhitestone.work/slides-v2/in-the-trenches-with-spark.html)
+    * Presentation for Shopify team members at an offsite - Nov 2, 2021
 *   [Data Science @ Shopify](https://ianwhitestone.work/slides-v2/data-science-at-shopify.html)
     * Presented to the students of the [Vector Institute](https://vectorinstitute.ai/) - May 6, 2021
 *   [Bootstrapping a data-driven application with Zappa](https://ianwhitestone.work/slides/serverless-meetup-feb-2020.html)
