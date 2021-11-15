@@ -4,7 +4,7 @@ title: Testing SQL
 author: ianwhitestone
 summary: Testing SQL code with mock data
 image: images/testing-sql/cover.png
-comments: true
+comments: false
 ---
 
 {% include head.html %}

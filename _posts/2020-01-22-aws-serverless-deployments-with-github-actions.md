@@ -2,7 +2,7 @@
 layout: post
 title: Serverless Python deployments with Github Actions
 author: ianwhitestone
-comments: true
+comments: false
 summary: How to leverage Github Actions to create a simple CI/CD pipeline for a serverless Python application.
 image: images/serverless-deployments-github-actions/slack_alerts.png
 ---

@@ -3,7 +3,7 @@ layout: post
 title: Continuous docker builds with Github Actions
 author: ianwhitestone
 summary: Building & pushing a Docker image to Google Container Registry with Github Actions
-comments: true
+comments: false
 image: images/docker-gcr-ga/docker-ga-gcr.png
 ---
 

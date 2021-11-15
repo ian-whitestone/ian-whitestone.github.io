@@ -3,7 +3,7 @@ layout: post
 title: Good Data Scientist, Bad Data Scientist
 author: ianwhitestone
 summary: What separates a good Data Scientist from a bad one?
-comments: False
+comments: false
 ---
 
 {% include head.html %}

@@ -3,7 +3,7 @@ layout: post
 title: Dask cluster on demand
 author: ianwhitestone
 summary: Automatically spinning up a remote Dask cluster in Python workflows
-comments: true
+comments: false
 image: images/dask-on-demand/snippet.png
 ---
 

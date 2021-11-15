@@ -3,7 +3,7 @@ layout: post
 title: Dask cluster security
 author: ianwhitestone
 summary: Adding TLS/SSL security to your Dask cluster
-comments: true
+comments: false
 image: images/dask-gcp/dask-gcp-bad-guy.png
 ---
 

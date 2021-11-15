@@ -3,7 +3,7 @@ layout: post
 title: Single node Dask on Google Cloud Platform
 author: ianwhitestone
 summary: Quick & easy single node Dask cluster on Google Compute Engine
-comments: true
+comments: false
 image: images/dask-gcp/dask-gcp-2.png
 ---
 

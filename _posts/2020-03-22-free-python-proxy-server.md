@@ -3,7 +3,7 @@ layout: post
 title: A free, Python proxy server on AWS Lambda
 author: ianwhitestone
 summary: How to leverage Flask, AWS Lambda and Zappa to create a free proxy server.
-comments: true
+comments: false
 image: images/free-proxy-server/architecture.png
 ---
 
