@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Building a home security system with a Raspberry Pi, Python and Slack
-comments: true
+comments: false
 ---
 
 <img src="{{ site.baseurl }}{% link images/rpi-security-system/demo.gif %}">

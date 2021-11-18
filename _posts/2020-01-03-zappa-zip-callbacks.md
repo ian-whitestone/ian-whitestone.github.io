@@ -3,7 +3,7 @@ layout: post
 title: Custom exclusions for Zappa deployment packages via zip callbacks
 summary: How I leveraged Zappa's zip callbacks functionality to exclude certain files and reduce my deployment package size.
 author: ianwhitestone
-comments: true
+comments: false
 image: images/zappa.jpeg
 ---
 

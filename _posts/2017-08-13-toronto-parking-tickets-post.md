@@ -1,7 +1,7 @@
 ---
 layout: post
 title: This fire hydrant in Toronto probably makes more 💸 than you
-comments: true
+comments: false
 ---
 
 *Don't want to read? Just check out the data visualization [here](https://ianwhitestone.work/toronto-parking-tickets/). Note, the Google Maps integration doesn't work anymore due to an outdated API key I don't want to replace. You can check out the [screenshots further down](#final-design) for a demonstration. [Project link](https://github.com/ian-whitestone/toronto-parking-tickets).*

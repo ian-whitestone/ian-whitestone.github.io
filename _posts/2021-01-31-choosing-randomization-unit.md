@@ -3,7 +3,7 @@ layout: post
 title: Choosing your randomization unit in online A/B tests
 author: ianwhitestone
 summary: A discussion around the implications of session versus user level randomization in online controlled experiments
-comments: true
+comments: false
 image: images/choosing-randomization-unit/session_level_split_w_memory.png
 ---
 
