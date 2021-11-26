@@ -120,9 +120,9 @@ Intuitively, this makes sense. With more variance in our user population, certai
 
 The delta method<sup>2</sup>, proposed by Deng et. al in 2011, provides a simple and efficient way to correctly estimate the variance for a proportion metric at a grain (i.e. session or pageview) that is lower in hierarchy than the randomization unit (i.e. user). The variance in the session conversion rate for each group is given by:
 
-$$ Var(p_T) = \frac{1}{\bar{N}_{iT}}Var(S_{iT}) + \frac{(\bar{S}_{iT})^2}{(\bar{N}_{iT})^4}Var(N_{iT})-2\frac{\bar{S}_{iT}}{(\bar{N}_{iT})^3}Cov(S_{iT},N_{iT}) $$
+$$ Var(p_T) = \frac{1}{(\bar{N}_{iT})^2}Var(S_{iT}) + \frac{(\bar{S}_{iT})^2}{(\bar{N}_{iT})^4}Var(N_{iT})-2\frac{\bar{S}_{iT}}{(\bar{N}_{iT})^3}Cov(S_{iT},N_{iT}) $$
 
-$$ Var(p_C) = \frac{1}{\bar{N}_{iC}}Var(S_{iC}) + \frac{(\bar{S}_{iC})^2}{(\bar{N}_{iC})^4}Var(N_{iC})-2\frac{\bar{S}_{iC}}{(\bar{N}_{iC})^3}Cov(S_{iC},N_{iC}) $$
+$$ Var(p_C) = \frac{1}{(\bar{N}_{iC})^2}Var(S_{iC}) + \frac{(\bar{S}_{iC})^2}{(\bar{N}_{iC})^4}Var(N_{iC})-2\frac{\bar{S}_{iC}}{(\bar{N}_{iC})^3}Cov(S_{iC},N_{iC}) $$
 
 Where,
 
