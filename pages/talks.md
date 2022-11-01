@@ -4,8 +4,20 @@ title: Talks
 permalink: /talks/
 ---
 
+*   [Extend the runway: a deep dive into Snowflake costs](https://select.dev/posts/extend-the-runway)
+    * Presented at [Coalesce 2022](https://coalesce.getdbt.com/) - October 17, 2022
+    * Slides and presentation recording available [here](https://select.dev/posts/extend-the-runway)
+*   [Snowflake Performance Tuning and Cost Optimization](https://select.dev/posts/snowflake-performance-tuning-and-cost-optimization)
+    * Presented at the Toronto Snowflake User Group meet up - September 28, 2022
+    * Slides and presentation recording available [here](https://select.dev/posts/snowflake-performance-tuning-and-cost-optimization)
+*   [Snowflake Optimization Power Hour](https://select.dev/posts/snowflake-optimization-power-hour)
+    * Presented at the [Get Stuff Done with Data Conference 2022](https://hopin.com/events/get-stuff-done-with-data-conference-2022-6dc40483-4ee2-4eb7-9ff5-ad98bce29c57/registration) - September 15, 2022   
+*   [What's up with DuckDB?](https://docs.google.com/presentation/d/1O4VYqDSccdm5MS9GjyMl7h5MnsotIZA5cVwZ_CLLSuk/edit?usp=sharing)
+    * Presented at the [Toronto Modern Data Stack Meetup](https://www.meetup.com/toronto-modern-data/) - August 17, 2022   
+    * [Presentation recording](https://www.youtube.com/watch?v=gwnwnREm-Os&ab_channel=JonathanTalmi) available on youtube
+    * Slides available [here](https://docs.google.com/presentation/d/1O4VYqDSccdm5MS9GjyMl7h5MnsotIZA5cVwZ_CLLSuk/edit#slide=id.p)
 *   [In the trenches with Spark](https://ianwhitestone.work/slides-v2/in-the-trenches-with-spark.html)
-    * Presentation for Shopify team members at an offsite - Nov 2, 2021
+    * Presentation for Shopify team members at an offsite - November 2, 2021
 *   [Data Science @ Shopify](https://ianwhitestone.work/slides-v2/data-science-at-shopify.html)
     * Presented to the students of the [Vector Institute](https://vectorinstitute.ai/) - May 6, 2021
 *   [Bootstrapping a data-driven application with Zappa](https://ianwhitestone.work/slides/serverless-meetup-feb-2020.html)
