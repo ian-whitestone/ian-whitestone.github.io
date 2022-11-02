@@ -4,6 +4,7 @@ title: Data templates with pydantic
 author: ianwhitestone
 summary: Using pydantic to create data generating factories for testing data heavy applications
 comments: false
+type: code
 image: images/data-templates-with-pydantic/data_template.png
 ---
 

@@ -4,6 +4,7 @@ title: Testing SQL
 author: ianwhitestone
 summary: Testing SQL code with mock data
 image: images/testing-sql/cover.png
+type: code
 comments: false
 ---
 
@@ -18,7 +19,7 @@ In this post, I'll demonstrate one method for testing SQL through the use of moc
 # Mocking Data
 The premise behind software testing is to run your code against a set of pre-defined inputs and compare the behaviour (or output) of the code to your expectation. For SQL code, the inputs are the tables in your database. So in order to run our SQL code against some pre-defined inputs, we need to create some tables, or table-like structures, that are filled with test data. The SQL query can then run against these "mocked tables", and the corresponding output can be validated.
 
-Most relational databases (Postgres, Redshift, Snowflake, etc.) support the creation of temporary tables, which persist for the length of a session. 
+Most relational databases (Postgres, Redshift, Snowflake, etc.) support the creation of temporary tables, which persist for the length of a session.
 
 ```sql
 CREATE TEMPORARY TABLE users (
@@ -42,7 +43,7 @@ users AS (
 		VALUES
 		(1, 'foo', 'bar'),
 		(2, 'bar', 'baz')
-	) AS t (id, first_name, last_name)   
+	) AS t (id, first_name, last_name)
 )
 ```
 
@@ -53,7 +54,7 @@ The mock data approach can easily & quickly be applied to perform some one-off t
 For example, my team was recently working on prototyping a new data model in SQL that would allow us to identify what e-commerce orders could be eligible for [duties](https://help.shopify.com/en/manual/taxes/charging-international-duties). The eligibility logic was something like:
 
 * At least one of the items in the order is shipped across country borders
-* This does not apply to intra-EU shipments, so an order shipped from France to Germany would not be charged duties. But orders can be fulfilled from multiple locations, so an order shipped from France & Canada to Germany could be charged duties. 
+* This does not apply to intra-EU shipments, so an order shipped from France to Germany would not be charged duties. But orders can be fulfilled from multiple locations, so an order shipped from France & Canada to Germany could be charged duties.
 
 The SQL query for this ended up being quite complex, as we had to aggregate all the fulfillment location countries into an array, get the buyer shipping address country, and then lookup which of those countries were EU members for every order. To ensure our logic was correctly covering all corner cases, we ended up quickly validating it using mocked data. Our final test looked something like this:
 
@@ -118,7 +119,7 @@ By running our final logic against some mock data, we were able to validate that
 
 # Continuous testing for production deployments
 
-The same mock data approach can be leveraged for continuous integration testing of SQL in production deployments. 
+The same mock data approach can be leveraged for continuous integration testing of SQL in production deployments.
 
 In one of my first jobs I was responsible for a batch machine learning model deployment. The first step in the model pipeline was to run a set of SQL queries with some basic transformations, read those results into memory, and then perform the remaining transformations, feature engineering and model scoring (predictions) in Python. Using the mock data approach outlined above, I implemented an end to end integration test where the SQL code was run against temporary tables loaded with test data, and the results were fed through the rest of the pipeline and validated against expectations.
 
@@ -223,9 +224,9 @@ results AS (
     GROUP BY 1,2
     ORDER BY 1,2
 )
-SELECT 
+SELECT
     *
-FROM 
+FROM
     results
 """
 
@@ -295,7 +296,7 @@ def render_sql(mode):
     if mode == 'test':
         # consider generating a random string in case there
         # could actually be a table named test_users or test_transactions
-        table_prefix = 'test_'   
+        table_prefix = 'test_'
 
     # map Jinja table reference to actual table (or CTE) name
     table_mapping = {
@@ -304,13 +305,13 @@ def render_sql(mode):
     }
 
     sql = sql_template.render(**table_mapping)
-    
+
     if mode == 'test':
         # create & inject the CTEs containing fake data into the SQL
         for table_ref, table_name in table_mapping.items():
             cte = build_cte(table_ref, table_name)
             sql = inject_cte(sql, cte)
-    
+
     return sql
 
 sql = render_sql('test')
@@ -335,7 +336,7 @@ You can see the full, working example of this process in this [Python file gist]
 WITH
 users AS (
     SELECT *
-    FROM 
+    FROM
         UNNEST(
             ARRAY<STRUCT<id INT64, first_name STRING, last_name STRING>>[
                 (1, 'foo', 'bar'),
