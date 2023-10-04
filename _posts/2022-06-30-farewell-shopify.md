@@ -43,4 +43,4 @@ Without question, I’d have nowhere close to the level of confidence required t
 
 <sup>4</sup> Jeff Bezos said [something similar](https://www.youtube.com/watch?v=jwG_qR6XmDQ) when deciding to leave D.E. Shaw to start Amazon.
 
-<sup>5</sup> More on this later, but I plan to solo bootstrap a niche B2B SaaS company in the data space. I don’t want a billion dollar valuation. I just want something I completely own that solves a problem and gives my customers delight. I’m happiest when I’m on the steepest part of the learning curve, and there’s no doubt that entrepreneurship and wearing all the hats required to build a company will bring this.
+<sup>5</sup> More on this later, but I plan to build a B2B SaaS company in the data space. I’m happiest when I’m on the steepest part of the learning curve, and there’s no doubt that entrepreneurship and wearing all the hats required to build a company will bring this.
