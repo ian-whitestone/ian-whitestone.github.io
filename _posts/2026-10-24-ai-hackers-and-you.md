@@ -8,7 +8,7 @@ image: images/ai-hackers-and-you/cve-tracker.png
 
 {% include head.html %}
 
-## Summary
+## TL;DR
 
 Advances in AI has made hacking much more effective, and the number of breaches has started to explode. Assume some sites you've used have been or will be breached, and that your old passwords and personal details (name, address, birth date) are already out there. Please:
 
