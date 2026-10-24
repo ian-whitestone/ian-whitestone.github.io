@@ -2,6 +2,8 @@
 layout: post_w_description
 title: "Things are gonna get bad in cyber: a heads-up for the people I care about"
 author: ianwhitestone
+summary: AI has made hacking far more effective and breaches are exploding. Here's what's going on and what you should do about it.
+hide_summary: true
 comments: false
 image: images/ai-hackers-and-you/cve-tracker.png
 ---

@@ -5,7 +5,9 @@ layout: default
 
 <article class="post">
   <h1 style="margin:0;padding:0">{{ page.title }}</h1>
+  {% unless page.hide_summary %}
   <h4 style="margin:0;padding:0">{{ page.summary }}</h4>
+  {% endunless %}
 
   <div class="entry">
     {{ content }}

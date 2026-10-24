@@ -10,7 +10,10 @@
     {% endif %}
 
     
-    {% if page.excerpt %}
+    {% if page.summary %}
+    <meta name="description" content="{{ page.summary }}" />
+    <meta property="og:description" content="{{ page.summary }}" />
+    {% elsif page.excerpt %}
     <meta name="description" content="{{ page.excerpt| strip_html }}" />
     <meta property="og:description" content="{{ page.excerpt| strip_html }}" />
     {% else %}
